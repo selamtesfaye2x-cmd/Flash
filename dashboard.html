@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - TV Store</title>
+  <title>Dashboard - Flash</title>
 </head>
 
 <body>
 
-  <h1>Welcome to Your Dashboard</h1>
+  <h1>User Dashboard</h1>
 
-  <p id="name">Loading...</p>
-  <p>Username: <span id="username">Loading...</span></p>
-  <p>Balance: <span id="balance">0.00</span></p>
-  <p>Referral Code: <span id="referralCode">Loading...</span></p>
+  <p id="welcome">Loading...</p>
 
-  <button id="logout">Log Out</button>
+  <h2>USDT</h2>
+  <p><strong>Simulated Balance:</strong> <span id="balance">0.00</span></p>
+
+  <button id="logoutButton">Logout</button>
 
   <p id="message"></p>
 
@@ -24,58 +24,42 @@
 
   <script>
     async function loadDashboard() {
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
 
-      const { data: { user }, error: userError } =
-        await supabaseClient.auth.getUser();
-
-      if (userError || !user) {
+      if (error || !user) {
         window.location.href = "login.html";
         return;
       }
 
-      const { data: profile, error: profileError } =
-        await supabaseClient
-          .from("profiles")
-          .select("full_name, username, balance, referral_code, is_admin")
-          .eq("id", user.id)
-          .single();
+      const fullName =
+        user.user_metadata?.full_name || user.email;
 
-      if (profileError) {
-        document.getElementById("message").textContent =
-          "Could not load your profile.";
-        return;
-      }
-
-      // Admins should use the admin dashboard
-      if (profile.is_admin === true) {
-        window.location.href = "admin.html";
-        return;
-      }
-
-      document.getElementById("name").textContent =
-        "Welcome, " + (profile.full_name || "User");
-
-      document.getElementById("username").textContent =
-        profile.username || "Not set";
+      document.getElementById("welcome").textContent =
+        "Welcome, " + fullName;
 
       document.getElementById("balance").textContent =
-        Number(profile.balance || 0).toFixed(2);
-
-      document.getElementById("referralCode").textContent =
-        profile.referral_code || "None";
+        "0.00";
     }
 
-    document.getElementById("logout").addEventListener("click", async () => {
+    document.getElementById("logoutButton").addEventListener(
+      "click",
+      async function() {
 
-      const { error } = await supabaseClient.auth.signOut();
+        const { error } =
+          await supabaseClient.auth.signOut();
 
-      if (error) {
-        document.getElementById("message").textContent = error.message;
-        return;
+        if (error) {
+          document.getElementById("message").textContent =
+            error.message;
+          return;
+        }
+
+        window.location.href = "login.html";
       }
-
-      window.location.href = "login.html";
-    });
+    );
 
     loadDashboard();
   </script>
