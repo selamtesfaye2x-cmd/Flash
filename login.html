@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - TV Store</title>
+  <title>Login - Flash</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     <input
       type="email"
       id="email"
-      placeholder="Email"
+      placeholder="Email Address"
       required
     >
 
@@ -56,31 +56,23 @@
 
       message.textContent = "Logging in...";
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
+      try {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
-      if (error) {
-        message.textContent = error.message;
-        return;
-      }
+        if (error) {
+          message.textContent = error.message;
+          return;
+        }
 
-      const { data: profile, error: profileError } = await supabaseClient
-        .from("profiles")
-        .select("is_admin")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileError) {
-        message.textContent = "Login successful, but profile could not be loaded.";
-        return;
-      }
-
-      if (profile.is_admin === true) {
-        window.location.href = "admin.html";
-      } else {
         window.location.href = "dashboard.html";
+
+      } catch (err) {
+        message.textContent =
+          "Something went wrong. Please try again.";
+        console.error(err);
       }
     });
   </script>
