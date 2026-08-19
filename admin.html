@@ -3,28 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - TV Store</title>
+  <title>Admin - Flash</title>
 </head>
 
 <body>
 
   <h1>Admin Dashboard</h1>
 
-  <p>Welcome, Administrator.</p>
+  <p id="status">Checking admin access...</p>
 
-  <hr>
+  <div id="adminPanel" style="display:none;">
 
-  <h2>Website Management</h2>
+    <h2>Manage Simulated USDT</h2>
 
-  <button>Manage Users</button>
-  <button>Manage TVs</button>
-  <button>Manage Orders</button>
+    <p>Admin controls will be connected here.</p>
 
-  <br><br>
+    <button id="logoutButton">Logout</button>
 
-  <button id="logout">Log Out</button>
-
-  <p id="message"></p>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
@@ -32,38 +28,38 @@
   <script>
     async function checkAdmin() {
 
-      const { data: { user }, error: userError } =
-        await supabaseClient.auth.getUser();
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
 
-      if (userError || !user) {
+      if (error || !user) {
         window.location.href = "login.html";
         return;
       }
 
-      const { data: profile, error: profileError } =
-        await supabaseClient
-          .from("profiles")
-          .select("is_admin")
-          .eq("id", user.id)
-          .single();
+      /*
+        We will add secure server-side admin
+        authorization before allowing balance
+        changes.
+      */
 
-      if (profileError || profile.is_admin !== true) {
-        window.location.href = "dashboard.html";
-        return;
-      }
+      document.getElementById("status").textContent =
+        "Logged in as: " + user.email;
+
+      document.getElementById("adminPanel").style.display =
+        "block";
     }
 
-    document.getElementById("logout").addEventListener("click", async () => {
+    document.getElementById("logoutButton").addEventListener(
+      "click",
+      async function() {
 
-      const { error } = await supabaseClient.auth.signOut();
+        await supabaseClient.auth.signOut();
 
-      if (error) {
-        document.getElementById("message").textContent = error.message;
-        return;
+        window.location.href = "login.html";
       }
-
-      window.location.href = "login.html";
-    });
+    );
 
     checkAdmin();
   </script>
