@@ -1,9 +1,11 @@
+"register.html"
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - TV Store</title>
+  <title>Create Account - Flash</title>
 </head>
 
 <body>
@@ -12,48 +14,13 @@
 
   <form id="registerForm">
 
-    <input
-      type="text"
-      id="fullName"
-      placeholder="Full Name"
-      required
-    >
-
+    <input type="text" id="fullName" placeholder="Full Name" required>
     <br><br>
 
-    <input
-      type="text"
-      id="username"
-      placeholder="Username"
-      required
-    >
-
+    <input type="email" id="email" placeholder="Email Address" required>
     <br><br>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Email"
-      required
-    >
-
-    <br><br>
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-      required
-    >
-
-    <br><br>
-
-    <input
-      type="text"
-      id="referralCode"
-      placeholder="Referral Code (optional)"
-    >
-
+    <input type="password" id="password" placeholder="Password" required>
     <br><br>
 
     <button type="submit">Create Account</button>
@@ -78,32 +45,37 @@
       event.preventDefault();
 
       const fullName = document.getElementById("fullName").value.trim();
-      const username = document.getElementById("username").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const referralCode = document.getElementById("referralCode").value.trim();
 
       message.textContent = "Creating account...";
-
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            full_name: fullName,
-            username: username,
-            referral_code: referralCode
+      
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: fullName
+            }
           }
+        });
+
+        if (error) {
+          message.textContent = error.message;
+          return;
         }
-      });
 
-      if (error) {
-        message.textContent = error.message;
-        return;
+        message.textContent =
+          "Account created successfully. Please log in.";
+
+        form.reset();
+
+      } catch (err) {
+        message.textContent =
+          "Something went wrong. Please try again.";
+        console.error(err);
       }
-
-      message.textContent =
-        "Account created successfully! You can now log in.";
     });
   </script>
 
