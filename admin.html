@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - TV Store</title>
+</head>
+
+<body>
+
+  <h1>Admin Dashboard</h1>
+
+  <p>Welcome, Administrator.</p>
+
+  <hr>
+
+  <h2>Website Management</h2>
+
+  <button>Manage Users</button>
+  <button>Manage TVs</button>
+  <button>Manage Orders</button>
+
+  <br><br>
+
+  <button id="logout">Log Out</button>
+
+  <p id="message"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+
+  <script>
+    async function checkAdmin() {
+
+      const { data: { user }, error: userError } =
+        await supabaseClient.auth.getUser();
+
+      if (userError || !user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { data: profile, error: profileError } =
+        await supabaseClient
+          .from("profiles")
+          .select("is_admin")
+          .eq("id", user.id)
+          .single();
+
+      if (profileError || profile.is_admin !== true) {
+        window.location.href = "dashboard.html";
+        return;
+      }
+    }
+
+    document.getElementById("logout").addEventListener("click", async () => {
+
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        document.getElementById("message").textContent = error.message;
+        return;
+      }
+
+      window.location.href = "login.html";
+    });
+
+    checkAdmin();
+  </script>
+
+</body>
+</html>
