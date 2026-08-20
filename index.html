@@ -3,30 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TV Store</title>
+  <title>CryptoSim — Crypto Simulation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1>Welcome to TV Store</h1>
-  <p>Samsung & TCL TVs at great prices.</p>
+  <header class="navbar">
+    <div class="logo">Crypto<span>Sim</span></div>
 
-  <a href="login.html">
-    <button>Login</button>
-  </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="register.html" class="nav-button">Create Account</a>
+    </nav>
+  </header>
 
-  <a href="register.html">
-    <button>Register</button>
-  </a>
+  <main>
 
-  <br><br>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="badge">SIMULATION PLATFORM</div>
 
-  <a href="dashboard.html">
-    My Dashboard
-  </a>
+        <h1>Explore the Crypto World<br>Without Real Funds</h1>
 
+        <p>
+          Create a simulated crypto account, manage virtual balances,
+          explore markets and test transactions in a safe environment.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="register.html" class="btn primary">Create Free Account</a>
+          <a href="login.html" class="btn secondary">Login</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice">
+      <strong>Simulation only:</strong>
+      All balances, transactions and crypto activity on this website are
+      virtual and have no real-world monetary value.
+    </section>
+
+    <section class="features">
+
+      <div class="feature-card">
+        <div class="icon">💰</div>
+        <h3>Simulated Wallet</h3>
+        <p>
+          Manage virtual USDT and other simulated crypto assets from your
+          personal dashboard.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📊</div>
+        <h3>Market Dashboard</h3>
+        <p>
+          Explore simulated cryptocurrency prices and market information.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🔄</div>
+        <h3>Virtual Transactions</h3>
+        <p>
+          Practice sending, receiving, depositing and withdrawing simulated
+          funds.
+        </p>
+      </div>
+
+    </section>
+
+    <section class="markets">
+      <div class="section-title">
+        <h2>Popular Crypto Assets</h2>
+        <p>Example simulated market data</p>
+      </div>
+
+      <div class="market-grid">
+
+        <div class="market-card">
+          <div class="coin-name">₿ Bitcoin</div>
+          <div class="coin-symbol">BTC</div>
+          <div class="coin-price">$65,432.21</div>
+          <div class="positive">+2.35%</div>
+        </div>
+
+        <div class="market-card">
+          <div class="coin-name">Ξ Ethereum</div>
+          <div class="coin-symbol">ETH</div>
+          <div class="coin-price">$3,124.66</div>
+          <div class="positive">+1.42%</div>
+        </div>
+
+        <div class="market-card">
+          <div class="coin-name">₮ Tether</div>
+          <div class="coin-symbol">USDT</div>
+          <div class="coin-price">$1.00</div>
+          <div class="positive">+0.01%</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Ready to start?</h2>
+      <p>Create your simulated account and explore the platform.</p>
+      <a href="register.html" class="btn primary">Get Started</a>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="logo">Crypto<span>Sim</span></div>
+    <p>Crypto simulation platform. No real cryptocurrency or monetary value.</p>
+    <p>© 2026 CryptoSim</p>
+  </footer>
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
+  <script src="Supabase.js"></script>
+  <script src="app.js"></script>
 
 </body>
-</html>
+                             </html>
