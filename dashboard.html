@@ -80,10 +80,10 @@
     async function loadDashboard() {
       const {
         data: { user },
-        error
+        error: userError
       } = await supabaseClient.auth.getUser();
 
-      if (error || !user) {
+      if (userError || !user) {
         window.location.href = "login.html";
         return;
       }
@@ -97,11 +97,65 @@
       document.getElementById("userEmail").textContent =
         user.email;
 
-      document.getElementById("balance").textContent =
-        "0.00";
+      // Find this user's balance
+      const { data: balanceRow, error: balanceError } =
+        await supabaseClient
+          .from("user_balances")
+          .select("balance")
+          .eq("user_id", user.id)
+          .maybeSingle();
 
-      document.getElementById("tableBalance").textContent =
-        "0.00";
+      if (balanceError) {
+        console.error(balanceError);
+        document.getElementById("message").textContent =
+          "Unable to load your simulated balance.";
+        document.getElementById("message").className =
+          "message error";
+        document.getElementById("message").style.display = "block";
+        return;
+      }
+
+      // Create the initial balance if this user does not have one
+      if (!balanceRow) {
+
+        const { data: newBalance, error: insertError } =
+          await supabaseClient
+            .from("user_balances")
+            .insert({
+              user_id: user.id,
+              balance: 0
+            })
+            .select("balance")
+            .single();
+
+        if (insertError) {
+          console.error(insertError);
+          document.getElementById("message").textContent =
+            "Unable to create your simulated balance.";
+          document.getElementById("message").className =
+            "message error";
+          document.getElementById("message").style.display = "block";
+          return;
+        }
+
+        displayBalance(newBalance.balance);
+
+      } else {
+
+        displayBalance(balanceRow.balance);
+
+      }
+    }
+
+    function displayBalance(amount) {
+      const formatted =
+        Number(amount).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+      document.getElementById("balance").textContent = formatted;
+      document.getElementById("tableBalance").textContent = formatted;
     }
 
     document.getElementById("logoutButton").addEventListener(
@@ -114,6 +168,8 @@
         if (error) {
           document.getElementById("message").textContent =
             error.message;
+          document.getElementById("message").className =
+            "message error";
           document.getElementById("message").style.display = "block";
           return;
         }
@@ -126,4 +182,4 @@
   </script>
 
 </body>
-</html>
+              </html>
