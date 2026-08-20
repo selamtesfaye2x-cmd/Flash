@@ -3,52 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Flash</title>
+  <title>Admin Dashboard — CryptoSim</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1>Admin Dashboard</h1>
+  <header class="navbar">
+    <div class="logo">Crypto<span>Sim</span></div>
 
-  <p id="status">Checking admin access...</p>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <button id="logoutButton" class="btn-secondary">Logout</button>
+    </nav>
+  </header>
 
-  <div id="adminPanel" style="display:none;">
+  <main class="container dashboard">
 
-    <h2>Manage Simulated USDT</h2>
+    <h1>Admin Dashboard</h1>
+    <p>Manage simulated user balances.</p>
 
-    <p>Admin controls will be connected here.</p>
+    <div class="table-container">
 
-    <button id="logoutButton">Logout</button>
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Simulated USDT</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-  </div>
+        <tbody id="usersTable">
+          <tr>
+            <td colspan="3">Loading users...</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <p id="message" class="message"></p>
+
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
+  <script src="Supabase.js"></script>
+  <script src="app.js"></script>
 
   <script>
-    async function checkAdmin() {
+    async function loadAdminDashboard() {
 
       const {
         data: { user },
-        error
+        error: userError
       } = await supabaseClient.auth.getUser();
 
-      if (error || !user) {
+      if (userError || !user) {
         window.location.href = "login.html";
         return;
       }
 
-      /*
-        We will add secure server-side admin
-        authorization before allowing balance
-        changes.
-      */
+      // Check administrator status
+      const { data: adminStatus, error: adminError } =
+        await supabaseClient.rpc("is_admin");
 
-      document.getElementById("status").textContent =
-        "Logged in as: " + user.email;
+      if (adminError || !adminStatus) {
+        document.getElementById("message").textContent =
+          "Access denied. Administrator account required.";
 
-      document.getElementById("adminPanel").style.display =
-        "block";
+        document.getElementById("message").className =
+          "message error";
+
+        document.getElementById("message").style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 2000);
+
+        return;
+      }
+
+      // Load balances
+      const { data: balances, error } =
+        await supabaseClient
+          .from("user_balances")
+          .select("id, user_id, balance")
+          .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+
+        document.getElementById("message").textContent =
+          "Unable to load user balances.";
+
+        document.getElementById("message").className =
+          "message error";
+
+        document.getElementById("message").style.display = "block";
+
+        return;
+      }
+
+      const table = document.getElementById("usersTable");
+
+      table.innerHTML = "";
+
+      if (!balances || balances.length === 0) {
+        table.innerHTML =
+          "<tr><td colspan='3'>No users found.</td></tr>";
+        return;
+      }
+
+      balances.forEach(row => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>${row.user_id}</td>
+          <td>${Number(row.balance).toFixed(2)} USDT</td>
+          <td>
+            <button
+              class="btn"
+              onclick="changeBalance('${row.id}', ${row.balance})">
+              Edit Balance
+            </button>
+          </td>
+        `;
+
+        table.appendChild(tr);
+      });
+    }
+
+    async function changeBalance(balanceId, currentBalance) {
+
+      const newBalance = prompt(
+        "Enter the new simulated USDT balance:",
+        currentBalance
+      );
+
+      if (newBalance === null) {
+        return;
+      }
+
+      const amount = Number(newBalance);
+
+      if (!Number.isFinite(amount) || amount < 0) {
+        alert("Please enter a valid non-negative number.");
+        return;
+      }
+
+      const { error } =
+        await supabaseClient
+          .from("user_balances")
+          .update({
+            balance: amount
+          })
+          .eq("id", balanceId);
+
+      if (error) {
+        console.error(error);
+        alert("Unable to update balance: " + error.message);
+        return;
+      }
+
+      alert("Simulated balance updated successfully.");
+
+      loadAdminDashboard();
     }
 
     document.getElementById("logoutButton").addEventListener(
@@ -61,8 +182,8 @@
       }
     );
 
-    checkAdmin();
+    loadAdminDashboard();
   </script>
 
 </body>
-</html>
+  </html>
