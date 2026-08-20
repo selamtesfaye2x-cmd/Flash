@@ -3,24 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Flash</title>
+  <title>Dashboard — CryptoSim</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <h1>User Dashboard</h1>
+  <header class="navbar">
+    <div class="logo">Crypto<span>Sim</span></div>
 
-  <p id="welcome">Loading...</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <button id="logoutButton" class="btn-secondary">Logout</button>
+    </nav>
+  </header>
 
-  <h2>USDT</h2>
-  <p><strong>Simulated Balance:</strong> <span id="balance">0.00</span></p>
+  <main class="container dashboard">
 
-  <button id="logoutButton">Logout</button>
+    <h1 id="welcome">Loading...</h1>
 
-  <p id="message"></p>
+    <div class="balance-card">
+      <h2>Simulated USDT Balance</h2>
+      <div class="balance">
+        <span id="balance">0.00</span> USDT
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>USDT</h3>
+        <p>Simulated Tether balance</p>
+      </div>
+
+      <div class="card">
+        <h3>Account</h3>
+        <p id="userEmail">Loading...</p>
+      </div>
+
+      <div class="card">
+        <h3>Transactions</h3>
+        <p>No simulated transactions yet.</p>
+      </div>
+
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Balance</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>USDT</td>
+            <td><span id="tableBalance">0.00</span></td>
+            <td>Simulated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p id="message" class="message"></p>
+
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase.js"></script>
+  <script src="Supabase.js"></script>
+  <script src="app.js"></script>
 
   <script>
     async function loadDashboard() {
@@ -40,7 +94,13 @@
       document.getElementById("welcome").textContent =
         "Welcome, " + fullName;
 
+      document.getElementById("userEmail").textContent =
+        user.email;
+
       document.getElementById("balance").textContent =
+        "0.00";
+
+      document.getElementById("tableBalance").textContent =
         "0.00";
     }
 
@@ -54,6 +114,7 @@
         if (error) {
           document.getElementById("message").textContent =
             error.message;
+          document.getElementById("message").style.display = "block";
           return;
         }
 
