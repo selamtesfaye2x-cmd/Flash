@@ -71,35 +71,23 @@ async function loadAdminDashboard() {
     await supabaseClient.rpc("is_admin");
 
   if (adminError) {
-
-    showError(
-      "Admin check failed: " + adminError.message
-    );
-
+    showError("Admin check failed: " + adminError.message);
     return;
   }
 
   if (!adminStatus) {
-
-    showError(
-      "Access denied. Administrator account required."
-    );
-
+    showError("Access denied. Administrator account required.");
     return;
   }
 
-  // Load balances
+  // Load simulated balances
   const { data: balances, error: balanceError } =
     await supabaseClient
       .from("user_balances")
-      .select("id, user_id, balance");
+      .select("id, user_id, simulated_usdt");
 
   if (balanceError) {
-
-    showError(
-      "Database error: " + balanceError.message
-    );
-
+    showError("Database error: " + balanceError.message);
     return;
   }
 
@@ -108,10 +96,8 @@ async function loadAdminDashboard() {
   table.innerHTML = "";
 
   if (!balances || balances.length === 0) {
-
     table.innerHTML =
       "<tr><td colspan='3'>No users found.</td></tr>";
-
     return;
   }
 
@@ -119,17 +105,19 @@ async function loadAdminDashboard() {
 
     const tr = document.createElement("tr");
 
+    const balance = Number(row.simulated_usdt || 0);
+
     tr.innerHTML = `
       <td>${row.user_id}</td>
 
       <td>
-        ${Number(row.balance).toFixed(2)} USDT
+        ${balance.toFixed(2)} USDT
       </td>
 
       <td>
         <button
           class="btn"
-          onclick="changeBalance('${row.id}', ${row.balance})">
+          onclick="changeBalance('${row.id}', ${balance})">
           Edit Balance
         </button>
       </td>
@@ -183,7 +171,7 @@ async function changeBalance(balanceId, currentBalance) {
     await supabaseClient
       .from("user_balances")
       .update({
-        balance: amount
+        simulated_usdt: amount
       })
       .eq("id", balanceId);
 
@@ -226,4 +214,4 @@ loadAdminDashboard();
 </script>
 
 </body>
-</html>
+  </html>
