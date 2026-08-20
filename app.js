@@ -1,4 +1,3 @@
-// Supabase configuration
 const SUPABASE_URL = "https://zngnhssgpqxvimfocpil.supabase.co";
 const SUPABASE_KEY = "sb_publishable_zbiPWLKaYRxQU-R3IgAO-A_RfkGfBZH";
 
@@ -7,65 +6,111 @@ const supabaseClient = supabase.createClient(
   SUPABASE_KEY
 );
 
-// Check current user
-async function getCurrentUser() {
-  const { data, error } = await supabaseClient.auth.getUser();
+// REGISTER
+const registerForm = document.getElementById("registerForm");
 
-  if (error) {
-    console.log("No logged-in user");
-    return null;
-  }
+if (registerForm) {
+  registerForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  return data.user;
-}
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-// Register
-async function registerUser(email, password) {
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
+    const message = document.getElementById("registerMessage");
+
+    message.style.display = "block";
+    message.className = "message";
+    message.textContent = "Creating your account...";
+
+    try {
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: name
+          }
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      message.className = "message success";
+      message.textContent =
+        "Account created successfully! You can now log in.";
+
+      registerForm.reset();
+
+    } catch (error) {
+      message.className = "message error";
+      message.textContent = error.message;
+    }
   });
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
 }
 
-// Login
-async function loginUser(email, password) {
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+// LOGIN
+const loginForm = document.getElementById("loginForm");
 
-  if (error) {
-    throw error;
-  }
+if (loginForm) {
+  loginForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  return data;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const message = document.getElementById("loginMessage");
+
+    message.style.display = "block";
+    message.className = "message";
+    message.textContent = "Logging in...";
+
+    try {
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      message.className = "message success";
+      message.textContent = "Login successful!";
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1000);
+
+    } catch (error) {
+      message.className = "message error";
+      message.textContent = error.message;
+    }
+  });
 }
 
-// Logout
+// LOGOUT
 async function logoutUser() {
   const { error } = await supabaseClient.auth.signOut();
 
   if (error) {
-    throw error;
+    console.error(error);
+    return;
   }
 
   window.location.href = "index.html";
 }
 
-// Watch login/logout state
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  console.log("Auth event:", event);
+// CURRENT USER
+async function getCurrentUser() {
+  const { data, error } = await supabaseClient.auth.getUser();
 
-  if (session) {
-    console.log("User logged in:", session.user.email);
-  } else {
-    console.log("No active session");
+  if (error) {
+    return null;
   }
-});
+
+  return data.user;
+    }
