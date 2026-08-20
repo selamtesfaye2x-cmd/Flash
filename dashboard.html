@@ -9,177 +9,242 @@
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">Crypto<span>Sim</span></div>
+<header class="navbar">
+  <div class="logo">Crypto<span>Sim</span></div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <button id="logoutButton" class="btn-secondary">Logout</button>
-    </nav>
-  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <button id="logoutButton" class="btn-secondary">Logout</button>
+  </nav>
+</header>
 
-  <main class="container dashboard">
+<main class="container dashboard">
 
-    <h1 id="welcome">Loading...</h1>
+  <h1 id="welcome">Loading...</h1>
 
-    <div class="balance-card">
-      <h2>Simulated USDT Balance</h2>
-      <div class="balance">
-        <span id="balance">0.00</span> USDT
-      </div>
+  <div class="balance-card">
+    <h2>Simulated USDT Balance</h2>
+
+    <div class="balance">
+      <span id="balance">0.00</span> USDT
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>USDT</h3>
+      <p>Simulated Tether balance</p>
     </div>
 
-    <div class="cards">
-
-      <div class="card">
-        <h3>USDT</h3>
-        <p>Simulated Tether balance</p>
-      </div>
-
-      <div class="card">
-        <h3>Account</h3>
-        <p id="userEmail">Loading...</p>
-      </div>
-
-      <div class="card">
-        <h3>Transactions</h3>
-        <p>No simulated transactions yet.</p>
-      </div>
-
+    <div class="card">
+      <h3>Account</h3>
+      <p id="userEmail">Loading...</p>
     </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Asset</th>
-            <th>Balance</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>USDT</td>
-            <td><span id="tableBalance">0.00</span></td>
-            <td>Simulated</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card">
+      <h3>Transactions</h3>
+      <p>No simulated transactions yet.</p>
     </div>
 
-    <p id="message" class="message"></p>
+  </div>
 
-  </main>
+  <div class="table-container">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="Supabase.js"></script>
-  <script src="app.js"></script>
+    <table>
 
-  <script>
-    async function loadDashboard() {
-      const {
-        data: { user },
-        error: userError
-      } = await supabaseClient.auth.getUser();
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Balance</th>
+          <th>Status</th>
+        </tr>
+      </thead>
 
-      if (userError || !user) {
-        window.location.href = "login.html";
-        return;
-      }
+      <tbody>
 
-      const fullName =
-        user.user_metadata?.full_name || user.email;
+        <tr>
+          <td>USDT</td>
+          <td>
+            <span id="tableBalance">0.00</span>
+          </td>
+          <td>Simulated</td>
+        </tr>
 
-      document.getElementById("welcome").textContent =
-        "Welcome, " + fullName;
+      </tbody>
 
-      document.getElementById("userEmail").textContent =
-        user.email;
+    </table>
 
-      // Find this user's balance
-      const { data: balanceRow, error: balanceError } =
-        await supabaseClient
-          .from("user_balances")
-          .select("balance")
-          .eq("user_id", user.id)
-          .maybeSingle();
+  </div>
 
-      if (balanceError) {
-        console.error(balanceError);
-        document.getElementById("message").textContent =
-          "Unable to load your simulated balance.";
-        document.getElementById("message").className =
-          "message error";
-        document.getElementById("message").style.display = "block";
-        return;
-      }
+  <p id="message" class="message"></p>
 
-      // Create the initial balance if this user does not have one
-      if (!balanceRow) {
+</main>
 
-        const { data: newBalance, error: insertError } =
-          await supabaseClient
-            .from("user_balances")
-            .insert({
-              user_id: user.id,
-              balance: 0
-            })
-            .select("balance")
-            .single();
 
-        if (insertError) {
-          console.error(insertError);
-          document.getElementById("message").textContent =
-            "Unable to create your simulated balance.";
-          document.getElementById("message").className =
-            "message error";
-          document.getElementById("message").style.display = "block";
-          return;
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="Supabase.js"></script>
+<script src="app.js"></script>
 
-        displayBalance(newBalance.balance);
+<script>
 
-      } else {
+async function loadDashboard() {
 
-        displayBalance(balanceRow.balance);
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
 
-      }
+  if (userError || !user) {
+
+    window.location.href = "login.html";
+    return;
+
+  }
+
+
+  const fullName =
+    user.user_metadata?.full_name || user.email;
+
+  document.getElementById("welcome").textContent =
+    "Welcome, " + fullName;
+
+  document.getElementById("userEmail").textContent =
+    user.email;
+
+
+  // Load this user's simulated balance
+  const {
+    data: balanceRow,
+    error: balanceError
+  } = await supabaseClient
+    .from("user_balances")
+    .select("simulated_usdt")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+
+  if (balanceError) {
+
+    console.error(balanceError);
+
+    showError(
+      "Unable to load your simulated balance."
+    );
+
+    return;
+
+  }
+
+
+  // If a balance doesn't exist, create one
+  if (!balanceRow) {
+
+    const {
+      data: newBalance,
+      error: insertError
+    } = await supabaseClient
+      .from("user_balances")
+      .insert({
+        user_id: user.id,
+        simulated_usdt: 0
+      })
+      .select("simulated_usdt")
+      .single();
+
+
+    if (insertError) {
+
+      console.error(insertError);
+
+      showError(
+        "Unable to create your simulated balance."
+      );
+
+      return;
+
     }
 
-    function displayBalance(amount) {
-      const formatted =
-        Number(amount).toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
 
-      document.getElementById("balance").textContent = formatted;
-      document.getElementById("tableBalance").textContent = formatted;
-    }
+    displayBalance(
+      newBalance.simulated_usdt
+    );
 
-    document.getElementById("logoutButton").addEventListener(
-      "click",
-      async function() {
+  } else {
 
-        const { error } =
-          await supabaseClient.auth.signOut();
+    displayBalance(
+      balanceRow.simulated_usdt
+    );
 
-        if (error) {
-          document.getElementById("message").textContent =
-            error.message;
-          document.getElementById("message").className =
-            "message error";
-          document.getElementById("message").style.display = "block";
-          return;
-        }
+  }
 
-        window.location.href = "login.html";
+}
+
+
+function displayBalance(amount) {
+
+  const formatted =
+    Number(amount || 0).toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
       }
     );
 
-    loadDashboard();
-  </script>
+
+  document.getElementById("balance").textContent =
+    formatted;
+
+  document.getElementById("tableBalance").textContent =
+    formatted;
+
+}
+
+
+function showError(text) {
+
+  const message =
+    document.getElementById("message");
+
+  message.textContent = text;
+
+  message.className =
+    "message error";
+
+  message.style.display =
+    "block";
+
+}
+
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    async function() {
+
+      const { error } =
+        await supabaseClient.auth.signOut();
+
+      if (error) {
+
+        showError(error.message);
+
+        return;
+
+      }
+
+      window.location.href =
+        "login.html";
+
+    }
+  );
+
+
+loadDashboard();
+
+</script>
 
 </body>
-              </html>
+  </html>
