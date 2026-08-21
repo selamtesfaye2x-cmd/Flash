@@ -1,116 +1,234 @@
-const SUPABASE_URL = "https://zngnhssgpqxvimfocpil.supabase.co";
-const SUPABASE_KEY = "sb_publishable_zbiPWLKaYRxQU-R3IgAO-A_RfkGfBZH";
+// ========================================
+// CRYPTOSIM APP.JS
+// ========================================
+// Supabase client is created in Supabase.js.
+// Do NOT create another client here.
+// ========================================
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
 
+// ========================================
 // REGISTER
-const registerForm = document.getElementById("registerForm");
+// ========================================
+
+const registerForm =
+  document.getElementById("registerForm");
 
 if (registerForm) {
-  registerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+  registerForm.addEventListener(
+    "submit",
+    async function (e) {
 
-    const message = document.getElementById("registerMessage");
+      e.preventDefault();
 
-    message.style.display = "block";
-    message.className = "message";
-    message.textContent = "Creating your account...";
+      const name =
+        document.getElementById("name").value.trim();
 
-    try {
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            full_name: name
-          }
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const message =
+        document.getElementById("registerMessage");
+
+      message.style.display = "block";
+      message.className = "message";
+      message.textContent =
+        "Creating your account...";
+
+      try {
+
+        const { error } =
+          await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+              data: {
+                full_name: name
+              }
+
+            }
+
+          });
+
+
+        if (error) {
+          throw error;
         }
-      });
 
-      if (error) {
-        throw error;
+
+        message.className =
+          "message success";
+
+        message.textContent =
+          "Account created successfully! You can now log in.";
+
+        registerForm.reset();
+
+
+      } catch (error) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          error.message;
+
       }
 
-      message.className = "message success";
-      message.textContent =
-        "Account created successfully! You can now log in.";
-
-      registerForm.reset();
-
-    } catch (error) {
-      message.className = "message error";
-      message.textContent = error.message;
     }
-  });
+  );
+
 }
 
+
+
+// ========================================
 // LOGIN
-const loginForm = document.getElementById("loginForm");
+// ========================================
+
+const loginForm =
+  document.getElementById("loginForm");
 
 if (loginForm) {
-  loginForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+  loginForm.addEventListener(
+    "submit",
+    async function (e) {
 
-    const message = document.getElementById("loginMessage");
+      e.preventDefault();
 
-    message.style.display = "block";
-    message.className = "message";
-    message.textContent = "Logging in...";
+      const email =
+        document.getElementById("email").value.trim();
 
-    try {
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+      const password =
+        document.getElementById("password").value;
 
-      if (error) {
-        throw error;
+      const message =
+        document.getElementById("loginMessage");
+
+
+      message.style.display = "block";
+
+      message.className =
+        "message";
+
+      message.textContent =
+        "Logging in...";
+
+
+      try {
+
+        const { error } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        message.className =
+          "message success";
+
+        message.textContent =
+          "Login successful!";
+
+
+        setTimeout(
+          function () {
+
+            window.location.href =
+              "dashboard.html";
+
+          },
+          500
+        );
+
+
+      } catch (error) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          error.message;
+
       }
 
-      message.className = "message success";
-      message.textContent = "Login successful!";
-
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1000);
-
-    } catch (error) {
-      message.className = "message error";
-      message.textContent = error.message;
     }
-  });
+  );
+
 }
 
+
+
+// ========================================
 // LOGOUT
+// ========================================
+
 async function logoutUser() {
-  const { error } = await supabaseClient.auth.signOut();
+
+  const { error } =
+    await supabaseClient.auth.signOut();
+
 
   if (error) {
-    console.error(error);
+
+    console.error(
+      "Logout error:",
+      error
+    );
+
     return;
+
   }
 
-  window.location.href = "index.html";
+
+  window.location.href =
+    "index.html";
+
 }
 
+
+
+// ========================================
 // CURRENT USER
+// ========================================
+
 async function getCurrentUser() {
-  const { data, error } = await supabaseClient.auth.getUser();
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
 
   if (error) {
+
+    console.error(
+      "User error:",
+      error
+    );
+
     return null;
+
   }
+
 
   return data.user;
-    }
+
+              }
