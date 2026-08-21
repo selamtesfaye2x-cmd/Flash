@@ -3,79 +3,368 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Dashboard — CryptoSim</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    /* ================================
+       DASHBOARD ENHANCEMENTS
+    ================================= */
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-header h1 {
+      margin-bottom: 5px;
+    }
+
+    .dashboard-header p {
+      margin-top: 0;
+      opacity: 0.75;
+    }
+
+    .refresh-button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .balance-card {
+      padding: 30px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+    }
+
+    .balance-card h2 {
+      margin-top: 0;
+    }
+
+    .balance {
+      font-size: 38px;
+      font-weight: 700;
+      margin-top: 15px;
+    }
+
+    .balance-label {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 5px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .card p {
+      word-break: break-word;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 25px;
+    }
+
+    .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    .table-container th,
+    .table-container td {
+      padding: 13px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .table-container h2 {
+      margin-top: 0;
+    }
+
+    .transaction-type-deposit {
+      font-weight: 700;
+    }
+
+    .transaction-type-withdrawal {
+      font-weight: 700;
+    }
+
+    .status {
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 25px !important;
+      opacity: 0.7;
+    }
+
+    .loading {
+      opacity: 0.7;
+    }
+
+    .error {
+      color: #d00;
+    }
+
+    .last-updated {
+      font-size: 13px;
+      opacity: 0.65;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+
+      .balance {
+        font-size: 30px;
+      }
+
+      .balance-card {
+        padding: 22px;
+      }
+
+      .dashboard-header {
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
+<!-- ================================
+     NAVIGATION
+================================= -->
+
 <header class="navbar">
-  <div class="logo">Crypto<span>Sim</span></div>
+
+  <div class="logo">
+    Crypto<span>Sim</span>
+  </div>
 
   <nav>
-    <a href="index.html">Home</a>
-    <button id="logoutButton" class="btn-secondary">Logout</button>
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <button
+      id="logoutButton"
+      class="btn-secondary">
+
+      Logout
+
+    </button>
+
   </nav>
+
 </header>
+
+
+
+<!-- ================================
+     MAIN DASHBOARD
+================================= -->
 
 <main class="container dashboard">
 
-  <h1 id="welcome">Loading...</h1>
+
+  <!-- HEADER -->
+
+  <div class="dashboard-header">
+
+    <div>
+
+      <h1 id="welcome">
+        Loading...
+      </h1>
+
+      <p>
+        Your simulated trading account
+      </p>
+
+      <div
+        id="lastUpdated"
+        class="last-updated">
+      </div>
+
+    </div>
+
+
+    <button
+      id="refreshButton"
+      class="refresh-button">
+
+      ↻ Refresh
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ================================
+       BALANCE CARD
+  ================================= -->
 
   <div class="balance-card">
-    <h2>Simulated USDT Balance</h2>
+
+    <h2>
+      Simulated USDT Balance
+    </h2>
 
     <div class="balance">
-      <span id="balance">0.00</span> USDT
+
+      <span id="balance">
+        0.00
+      </span>
+
+      USDT
+
     </div>
+
+    <div class="balance-label">
+      Simulated balance
+    </div>
+
   </div>
+
+
+
+  <!-- ================================
+       SUMMARY CARDS
+  ================================= -->
 
   <div class="cards">
 
-    <div class="card">
-      <h3>USDT</h3>
-      <p>Simulated Tether balance</p>
-    </div>
 
     <div class="card">
-      <h3>Account</h3>
-      <p id="userEmail">Loading...</p>
+
+      <h3>
+        USDT
+      </h3>
+
+      <p>
+        Simulated Tether balance
+      </p>
+
     </div>
 
+
     <div class="card">
-      <h3>Transactions</h3>
-      <p id="transactionCount">Loading...</p>
+
+      <h3>
+        Account
+      </h3>
+
+      <p id="userEmail">
+        Loading...
+      </p>
+
     </div>
+
+
+    <div class="card">
+
+      <h3>
+        Transactions
+      </h3>
+
+      <p id="transactionCount">
+        Loading...
+      </p>
+
+    </div>
+
 
   </div>
 
 
-  <!-- BALANCE -->
+
+  <!-- ================================
+       ACCOUNT BALANCE
+  ================================= -->
 
   <div class="table-container">
 
-    <h2>Account Balance</h2>
+    <h2>
+      Account Balance
+    </h2>
 
     <table>
 
       <thead>
+
         <tr>
-          <th>Asset</th>
-          <th>Balance</th>
-          <th>Status</th>
+
+          <th>
+            Asset
+          </th>
+
+          <th>
+            Balance
+          </th>
+
+          <th>
+            Status
+          </th>
+
         </tr>
+
       </thead>
+
 
       <tbody>
 
         <tr>
-          <td>USDT</td>
 
           <td>
-            <span id="tableBalance">0.00</span>
+            USDT
           </td>
 
-          <td>Simulated</td>
+          <td>
+
+            <span id="tableBalance">
+              0.00
+            </span>
+
+            USDT
+
+          </td>
+
+          <td>
+            Simulated
+          </td>
+
         </tr>
 
       </tbody>
@@ -85,30 +374,60 @@
   </div>
 
 
-  <!-- TRANSACTIONS -->
+
+  <!-- ================================
+       TRANSACTION HISTORY
+  ================================= -->
 
   <div class="table-container">
 
-    <h2>Transaction History</h2>
+    <h2>
+      Transaction History
+    </h2>
 
     <table>
 
       <thead>
+
         <tr>
-          <th>Type</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Description</th>
-          <th>Date</th>
+
+          <th>
+            Type
+          </th>
+
+          <th>
+            Amount
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th>
+            Description
+          </th>
+
+          <th>
+            Date
+          </th>
+
         </tr>
+
       </thead>
+
 
       <tbody id="transactionsTable">
 
         <tr>
-          <td colspan="5">
+
+          <td
+            colspan="5"
+            class="loading">
+
             Loading transactions...
+
           </td>
+
         </tr>
 
       </tbody>
@@ -118,63 +437,113 @@
   </div>
 
 
-  <p id="message" class="message"></p>
+
+  <!-- MESSAGE -->
+
+  <p
+    id="message"
+    class="message">
+  </p>
+
 
 </main>
 
 
+
+<!-- ================================
+     SUPABASE
+================================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="Supabase.js"></script>
+
 <script src="app.js"></script>
+
 
 
 <script>
 
+
+/* =========================================
+   LOAD DASHBOARD
+========================================= */
+
 async function loadDashboard() {
+
+
+  /* -----------------------------------------
+     CHECK LOGIN
+  ----------------------------------------- */
 
   const {
     data: { user },
     error: userError
-  } = await supabaseClient.auth.getUser();
+  } =
+    await supabaseClient.auth.getUser();
 
 
   if (userError || !user) {
 
-    window.location.href = "login.html";
+    window.location.href =
+      "login.html";
+
     return;
 
   }
 
 
-  // USER INFORMATION
+
+  /* -----------------------------------------
+     USER INFORMATION
+  ----------------------------------------- */
 
   const fullName =
-    user.user_metadata?.full_name || user.email;
+    user.user_metadata?.full_name ||
+    user.email ||
+    "User";
 
 
-  document.getElementById("welcome").textContent =
+  document.getElementById(
+    "welcome"
+  ).textContent =
     "Welcome, " + fullName;
 
 
-  document.getElementById("userEmail").textContent =
+  document.getElementById(
+    "userEmail"
+  ).textContent =
     user.email;
 
 
-  // LOAD BALANCE
+
+  /* -----------------------------------------
+     LOAD BALANCE
+  ----------------------------------------- */
 
   const {
     data: balanceRow,
     error: balanceError
-  } = await supabaseClient
-    .from("user_balances")
-    .select("simulated_usdt")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  } =
+    await supabaseClient
+      .from("user_balances")
+      .select(
+        "simulated_usdt"
+      )
+      .eq(
+        "user_id",
+        user.id
+      )
+      .maybeSingle();
 
 
   if (balanceError) {
 
-    console.error(balanceError);
+    console.error(
+      "BALANCE ERROR:",
+      balanceError
+    );
+
 
     showError(
       "Unable to load your simulated balance: " +
@@ -186,26 +555,42 @@ async function loadDashboard() {
   }
 
 
-  // CREATE BALANCE IF MISSING
+
+  /* -----------------------------------------
+     CREATE BALANCE IF MISSING
+  ----------------------------------------- */
 
   if (!balanceRow) {
+
 
     const {
       data: newBalance,
       error: insertError
-    } = await supabaseClient
-      .from("user_balances")
-      .insert({
-        user_id: user.id,
-        simulated_usdt: 0
-      })
-      .select("simulated_usdt")
-      .single();
+    } =
+      await supabaseClient
+        .from("user_balances")
+        .insert({
+
+          user_id:
+            user.id,
+
+          simulated_usdt:
+            0
+
+        })
+        .select(
+          "simulated_usdt"
+        )
+        .single();
 
 
     if (insertError) {
 
-      console.error(insertError);
+      console.error(
+        "BALANCE CREATION ERROR:",
+        insertError
+      );
+
 
       showError(
         "Unable to create your simulated balance: " +
@@ -221,7 +606,9 @@ async function loadDashboard() {
       newBalance.simulated_usdt
     );
 
+
   } else {
+
 
     displayBalance(
       balanceRow.simulated_usdt
@@ -230,19 +617,49 @@ async function loadDashboard() {
   }
 
 
-  // LOAD TRANSACTIONS
 
-  await loadTransactions(user.id);
+  /* -----------------------------------------
+     LOAD TRANSACTIONS
+  ----------------------------------------- */
+
+  await loadTransactions(
+    user.id
+  );
+
+
+
+  /* -----------------------------------------
+     LAST UPDATED
+  ----------------------------------------- */
+
+  document.getElementById(
+    "lastUpdated"
+  ).textContent =
+    "Last updated: " +
+    new Date().toLocaleTimeString(
+      "en-US",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
 
 }
 
 
-/* DISPLAY BALANCE */
 
-function displayBalance(amount) {
+/* =========================================
+   DISPLAY BALANCE
+========================================= */
+
+function displayBalance(
+  amount
+) {
 
   const formatted =
-    Number(amount || 0).toLocaleString(
+    Number(
+      amount || 0
+    ).toLocaleString(
       "en-US",
       {
         minimumFractionDigits: 2,
@@ -251,32 +668,49 @@ function displayBalance(amount) {
     );
 
 
-  document.getElementById("balance").textContent =
+  document.getElementById(
+    "balance"
+  ).textContent =
     formatted;
 
 
-  document.getElementById("tableBalance").textContent =
+  document.getElementById(
+    "tableBalance"
+  ).textContent =
     formatted;
 
 }
 
 
-/* LOAD TRANSACTIONS */
 
-async function loadTransactions(userId) {
+/* =========================================
+   LOAD TRANSACTIONS
+========================================= */
+
+async function loadTransactions(
+  userId
+) {
+
 
   const {
     data: transactions,
     error
-  } = await supabaseClient
-    .from("transactions")
-    .select(
-      "id, type, amount, status, description, created_at"
-    )
-    .eq("user_id", userId)
-    .order("created_at", {
-      ascending: false
-    });
+  } =
+    await supabaseClient
+      .from("transactions")
+      .select(
+        "id, type, amount, status, description, created_at"
+      )
+      .eq(
+        "user_id",
+        userId
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
 
   const table =
@@ -285,7 +719,10 @@ async function loadTransactions(userId) {
     );
 
 
-  /* SHOW ACTUAL SUPABASE ERROR */
+
+  /* -----------------------------------------
+     ERROR
+  ----------------------------------------- */
 
   if (error) {
 
@@ -295,13 +732,24 @@ async function loadTransactions(userId) {
     );
 
 
-    table.innerHTML =
-      "<tr>" +
-      "<td colspan='5'>" +
-      "Transaction error: " +
-      escapeHtml(error.message) +
-      "</td>" +
-      "</tr>";
+    table.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="5"
+          class="error">
+
+          Transaction error:
+          ${escapeHtml(
+            error.message
+          )}
+
+        </td>
+
+      </tr>
+
+    `;
 
 
     document.getElementById(
@@ -315,22 +763,31 @@ async function loadTransactions(userId) {
   }
 
 
-  table.innerHTML = "";
 
-
-  /* NO TRANSACTIONS */
+  /* -----------------------------------------
+     NO TRANSACTIONS
+  ----------------------------------------- */
 
   if (
     !transactions ||
     transactions.length === 0
   ) {
 
-    table.innerHTML =
-      "<tr>" +
-      "<td colspan='5'>" +
-      "No simulated transactions yet." +
-      "</td>" +
-      "</tr>";
+    table.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="5"
+          class="empty-state">
+
+          No simulated transactions yet.
+
+        </td>
+
+      </tr>
+
+    `;
 
 
     document.getElementById(
@@ -344,7 +801,10 @@ async function loadTransactions(userId) {
   }
 
 
-  /* TRANSACTION COUNT */
+
+  /* -----------------------------------------
+     TRANSACTION COUNT
+  ----------------------------------------- */
 
   document.getElementById(
     "transactionCount"
@@ -357,14 +817,25 @@ async function loadTransactions(userId) {
     );
 
 
-  /* DISPLAY TRANSACTIONS */
+
+  /* -----------------------------------------
+     DISPLAY TRANSACTIONS
+  ----------------------------------------- */
+
+  table.innerHTML = "";
+
 
   transactions.forEach(
     function(transaction) {
 
-      const tr =
-        document.createElement("tr");
 
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      /* Amount */
 
       const amount =
         Number(
@@ -378,46 +849,96 @@ async function loadTransactions(userId) {
         );
 
 
+      /* Date */
+
       const date =
-        new Date(
-          transaction.created_at
-        ).toLocaleString(
-          "en-US",
-          {
-            dateStyle: "medium",
-            timeStyle: "short"
-          }
+        transaction.created_at
+          ? new Date(
+              transaction.created_at
+            ).toLocaleString(
+              "en-US",
+              {
+                dateStyle:
+                  "medium",
+
+                timeStyle:
+                  "short"
+              }
+            )
+          : "-";
+
+
+      /* Type */
+
+      const transactionType =
+        String(
+          transaction.type || ""
         );
+
+
+      const typeClass =
+        transactionType
+          .toLowerCase()
+          .includes("withdraw")
+            ? "transaction-type-withdrawal"
+            : "transaction-type-deposit";
 
 
       tr.innerHTML = `
 
-        <td>
-          ${escapeHtml(transaction.type)}
-        </td>
+        <td
+          class="${typeClass}">
 
-        <td>
-          ${amount} USDT
-        </td>
-
-        <td>
-          ${escapeHtml(transaction.status)}
-        </td>
-
-        <td>
           ${escapeHtml(
-            transaction.description || "-"
+            transactionType
           )}
+
         </td>
 
+
         <td>
-          ${date}
+
+          ${amount}
+          USDT
+
+        </td>
+
+
+        <td
+          class="status">
+
+          ${escapeHtml(
+            transaction.status ||
+            "Completed"
+          )}
+
+        </td>
+
+
+        <td>
+
+          ${escapeHtml(
+            transaction.description ||
+            "-"
+          )}
+
+        </td>
+
+
+        <td>
+
+          ${escapeHtml(
+            date
+          )}
+
         </td>
 
       `;
 
 
-      table.appendChild(tr);
+      table.appendChild(
+        tr
+      );
 
     }
   );
@@ -425,12 +946,19 @@ async function loadTransactions(userId) {
 }
 
 
-/* SECURITY */
 
-function escapeHtml(value) {
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(
+  value
+) {
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   div.textContent =
@@ -444,9 +972,14 @@ function escapeHtml(value) {
 }
 
 
-/* ERROR MESSAGE */
 
-function showError(text) {
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+function showError(
+  text
+) {
 
   const message =
     document.getElementById(
@@ -468,15 +1001,62 @@ function showError(text) {
 }
 
 
-/* LOGOUT */
+
+/* =========================================
+   REFRESH BUTTON
+========================================= */
 
 document
-  .getElementById("logoutButton")
+  .getElementById(
+    "refreshButton"
+  )
   .addEventListener(
     "click",
     async function() {
 
-      const { error } =
+      const button =
+        this;
+
+
+      button.disabled =
+        true;
+
+
+      button.textContent =
+        "Refreshing...";
+
+
+      await loadDashboard();
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        "↻ Refresh";
+
+    }
+  );
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async function() {
+
+
+      const {
+        error
+      } =
         await supabaseClient.auth.signOut();
 
 
@@ -498,9 +1078,13 @@ document
   );
 
 
-/* START */
+
+/* =========================================
+   START DASHBOARD
+========================================= */
 
 loadDashboard();
+
 
 </script>
 
