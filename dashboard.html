@@ -69,12 +69,6 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-bottom:15px;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.market-header h2{
-margin:0;
 }
 
 .market-note{
@@ -187,7 +181,6 @@ color:#d00;
 .table-container{
 overflow-x:auto;
 margin-bottom:25px;
-border-radius:12px;
 }
 
 .table-container table{
@@ -220,6 +213,25 @@ opacity:.7;
 .last-updated{
 font-size:13px;
 opacity:.65;
+}
+
+#connectionStatus{
+margin-bottom:20px;
+padding:12px;
+border-radius:8px;
+font-weight:600;
+}
+
+.status-loading{
+background:#eee;
+}
+
+.status-success{
+color:green;
+}
+
+.status-error{
+color:#d00;
 }
 
 @media(max-width:600px){
@@ -261,7 +273,9 @@ Home
 <button
 id="logoutButton"
 class="btn-secondary">
+
 Logout
+
 </button>
 
 </nav>
@@ -273,7 +287,15 @@ Logout
 <main class="container dashboard">
 
 
-<!-- HEADER -->
+<div
+id="connectionStatus"
+class="status-loading">
+
+Connecting to your simulated account...
+
+</div>
+
+
 
 <div class="dashboard-header">
 
@@ -410,9 +432,11 @@ Bitcoin
 </div>
 
 <div
-class="market-price"
-id="btcPrice">
+id="btcPrice"
+class="market-price">
+
 $78,000.00
+
 </div>
 
 <div class="market-change change-positive">
@@ -434,9 +458,11 @@ Ethereum
 </div>
 
 <div
-class="market-price"
-id="ethPrice">
+id="ethPrice"
+class="market-price">
+
 $2,450.00
+
 </div>
 
 <div class="market-change change-positive">
@@ -458,9 +484,11 @@ Solana
 </div>
 
 <div
-class="market-price"
-id="solPrice">
+id="solPrice"
+class="market-price">
+
 $92.00
+
 </div>
 
 <div class="market-change change-positive">
@@ -482,9 +510,11 @@ BNB
 </div>
 
 <div
-class="market-price"
-id="bnbPrice">
+id="bnbPrice"
+class="market-price">
+
 $680.00
+
 </div>
 
 <div class="market-change change-negative">
@@ -640,17 +670,9 @@ My Simulated Holdings
 
 <tr>
 
-<th>
-Asset
-</th>
-
-<th>
-Quantity
-</th>
-
-<th>
-Status
-</th>
+<th>Asset</th>
+<th>Quantity</th>
+<th>Status</th>
 
 </tr>
 
@@ -692,33 +714,13 @@ Simulated Trade History
 
 <tr>
 
-<th>
-Asset
-</th>
-
-<th>
-Type
-</th>
-
-<th>
-Amount
-</th>
-
-<th>
-Price
-</th>
-
-<th>
-Total
-</th>
-
-<th>
-Status
-</th>
-
-<th>
-Date
-</th>
+<th>Asset</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Price</th>
+<th>Total</th>
+<th>Status</th>
+<th>Date</th>
 
 </tr>
 
@@ -746,7 +748,7 @@ Loading trades...
 
 
 
-<!-- ACCOUNT BALANCE -->
+<!-- BALANCE TABLE -->
 
 <div class="table-container">
 
@@ -760,17 +762,9 @@ Account Balance
 
 <tr>
 
-<th>
-Asset
-</th>
-
-<th>
-Balance
-</th>
-
-<th>
-Status
-</th>
+<th>Asset</th>
+<th>Balance</th>
+<th>Status</th>
 
 </tr>
 
@@ -822,25 +816,11 @@ Transaction History
 
 <tr>
 
-<th>
-Type
-</th>
-
-<th>
-Amount
-</th>
-
-<th>
-Status
-</th>
-
-<th>
-Description
-</th>
-
-<th>
-Date
-</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Description</th>
+<th>Date</th>
 
 </tr>
 
@@ -877,26 +857,91 @@ class="message">
 
 
 
+<!-- SUPABASE LIBRARY -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="Supabase.js"></script>
 
-<script src="app.js"></script>
+<!-- YOUR SUPABASE CONFIG -->
+
+<script src="Supabase.js"></script>
 
 
 <script>
 
+/* =====================================
+   CONNECTION TEST
+===================================== */
 
-/* =========================================
-   GLOBAL USER
-========================================= */
+const statusBox =
+document.getElementById("connectionStatus");
+
+
+function setStatus(text,type){
+
+statusBox.textContent = text;
+
+statusBox.className = "";
+
+statusBox.id = "connectionStatus";
+
+if(type === "success"){
+statusBox.classList.add("status-success");
+}
+
+else if(type === "error"){
+statusBox.classList.add("status-error");
+}
+
+else{
+statusBox.classList.add("status-loading");
+}
+
+}
+
+
+/* =====================================
+   CHECK SUPABASE LIBRARY
+===================================== */
+
+if(!window.supabase){
+
+setStatus(
+"Supabase library failed to load.",
+"error"
+);
+
+throw new Error(
+"Supabase library unavailable."
+);
+
+}
+
+
+/* =====================================
+   CHECK CLIENT
+===================================== */
+
+if(!window.supabaseClient){
+
+setStatus(
+"Supabase client was not created.",
+"error"
+);
+
+throw new Error(
+"supabaseClient unavailable."
+);
+
+}
+
 
 let currentUser = null;
 
 
-/* =========================================
+/* =====================================
    MARKET PRICES
-========================================= */
+===================================== */
 
 const marketPrices = {
 
@@ -911,9 +956,9 @@ const marketPrices = {
 };
 
 
-/* =========================================
+/* =====================================
    ESCAPE HTML
-========================================= */
+===================================== */
 
 function escapeHtml(value){
 
@@ -932,14 +977,64 @@ return div.innerHTML;
 }
 
 
-/* =========================================
-   ERROR
-========================================= */
+/* =====================================
+   BALANCE DISPLAY
+===================================== */
+
+function displayBalance(amount){
+
+const formatted =
+Number(amount || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+document.getElementById(
+"balance"
+).textContent =
+formatted;
+
+document.getElementById(
+"tableBalance"
+).textContent =
+formatted;
+
+}
+
+
+/* =====================================
+   TRADE MESSAGE
+===================================== */
+
+function showTradeMessage(text,type){
+
+const message =
+document.getElementById(
+"tradeMessage"
+);
+
+message.textContent =
+text;
+
+message.className =
+"trade-message " + type;
+
+}
+
+
+/* =====================================
+   GENERAL ERROR
+===================================== */
 
 function showError(text){
 
 const message =
-document.getElementById("message");
+document.getElementById(
+"message"
+);
 
 message.textContent =
 text;
@@ -953,120 +1048,9 @@ message.style.display =
 }
 
 
-/* =========================================
-   TRADE MESSAGE
-========================================= */
-
-function showTradeMessage(text,type){
-
-const message =
-document.getElementById("tradeMessage");
-
-message.textContent =
-text;
-
-message.className =
-"trade-message " + type;
-
-}
-
-
-/* =========================================
-   DISPLAY MARKET
-========================================= */
-
-function displayMarketPrices(){
-
-document.getElementById("btcPrice").textContent =
-"$" +
-marketPrices["BTC/USDT"].toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-document.getElementById("ethPrice").textContent =
-"$" +
-marketPrices["ETH/USDT"].toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-document.getElementById("solPrice").textContent =
-"$" +
-marketPrices["SOL/USDT"].toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-document.getElementById("bnbPrice").textContent =
-"$" +
-marketPrices["BNB/USDT"].toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-}
-
-
-/* =========================================
-   SET TRADE PRICE
-========================================= */
-
-function setSelectedMarketPrice(){
-
-const asset =
-document.getElementById("tradeAsset").value;
-
-const price =
-marketPrices[asset];
-
-document.getElementById("tradePrice").value =
-price;
-
-updateTradeTotal();
-
-}
-
-
-/* =========================================
-   BALANCE DISPLAY
-========================================= */
-
-function displayBalance(amount){
-
-const formatted =
-Number(amount || 0).toLocaleString(
-"en-US",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-document.getElementById("balance").textContent =
-formatted;
-
-document.getElementById("tableBalance").textContent =
-formatted;
-
-}
-
-
-/* =========================================
+/* =====================================
    LOAD BALANCE
-========================================= */
+===================================== */
 
 async function loadBalance(){
 
@@ -1077,8 +1061,12 @@ error
 await supabaseClient
 .from("user_balances")
 .select("simulated_usdt")
-.eq("user_id",currentUser.id)
+.eq(
+"user_id",
+currentUser.id
+)
 .maybeSingle();
+
 
 if(error){
 
@@ -1102,9 +1090,11 @@ await supabaseClient
 .from("user_balances")
 .insert({
 
-user_id:currentUser.id,
+user_id:
+currentUser.id,
 
-simulated_usdt:0
+simulated_usdt:
+0
 
 })
 .select("simulated_usdt")
@@ -1122,26 +1112,32 @@ return;
 
 }
 
-displayBalance(newData.simulated_usdt);
+displayBalance(
+newData.simulated_usdt
+);
 
 return;
 
 }
 
 
-displayBalance(data.simulated_usdt);
+displayBalance(
+data.simulated_usdt
+);
 
 }
 
 
-/* =========================================
+/* =====================================
    LOAD HOLDINGS
-========================================= */
+===================================== */
 
 async function loadHoldings(){
 
 const table =
-document.getElementById("holdingsTable");
+document.getElementById(
+"holdingsTable"
+);
 
 const {
 data,
@@ -1149,8 +1145,13 @@ error
 } =
 await supabaseClient
 .from("simulated_holdings")
-.select("asset,quantity")
-.eq("user_id",currentUser.id)
+.select(
+"asset,quantity"
+)
+.eq(
+"user_id",
+currentUser.id
+)
 .order("asset");
 
 
@@ -1160,7 +1161,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="3" class="error">
+<td
+colspan="3"
+class="error">
 
 Unable to load holdings:
 ${escapeHtml(error.message)}
@@ -1182,7 +1185,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="3" class="empty-state">
+<td
+colspan="3"
+class="empty-state">
 
 No simulated crypto holdings yet.
 
@@ -1199,6 +1204,7 @@ return;
 
 table.innerHTML = "";
 
+
 data.forEach(item => {
 
 const row =
@@ -1211,7 +1217,9 @@ ${escapeHtml(item.asset)}
 </td>
 
 <td>
-${Number(item.quantity || 0).toLocaleString(
+${Number(
+item.quantity || 0
+).toLocaleString(
 "en-US",
 {
 minimumFractionDigits:2,
@@ -1233,14 +1241,16 @@ table.appendChild(row);
 }
 
 
-/* =========================================
+/* =====================================
    LOAD TRADES
-========================================= */
+===================================== */
 
 async function loadTrades(){
 
 const table =
-document.getElementById("tradesTable");
+document.getElementById(
+"tradesTable"
+);
 
 const {
 data,
@@ -1251,7 +1261,10 @@ await supabaseClient
 .select(
 "asset,side,amount,price,total,status,created_at"
 )
-.eq("user_id",currentUser.id)
+.eq(
+"user_id",
+currentUser.id
+)
 .order(
 "created_at",
 {
@@ -1266,7 +1279,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="7" class="error">
+<td
+colspan="7"
+class="error">
 
 Unable to load trades:
 ${escapeHtml(error.message)}
@@ -1288,7 +1303,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="7" class="empty-state">
+<td
+colspan="7"
+class="empty-state">
 
 No simulated trades yet.
 
@@ -1304,6 +1321,7 @@ return;
 
 
 table.innerHTML = "";
+
 
 data.forEach(trade => {
 
@@ -1337,7 +1355,9 @@ ${escapeHtml(trade.side)}
 </td>
 
 <td>
-${Number(trade.amount || 0).toLocaleString(
+${Number(
+trade.amount || 0
+).toLocaleString(
 "en-US",
 {
 minimumFractionDigits:2,
@@ -1347,7 +1367,9 @@ maximumFractionDigits:8
 </td>
 
 <td>
-${Number(trade.price || 0).toLocaleString(
+${Number(
+trade.price || 0
+).toLocaleString(
 "en-US",
 {
 minimumFractionDigits:2,
@@ -1358,7 +1380,9 @@ USDT
 </td>
 
 <td>
-${Number(trade.total || 0).toLocaleString(
+${Number(
+trade.total || 0
+).toLocaleString(
 "en-US",
 {
 minimumFractionDigits:2,
@@ -1370,7 +1394,8 @@ USDT
 
 <td>
 ${escapeHtml(
-trade.status || "COMPLETED"
+trade.status ||
+"COMPLETED"
 )}
 </td>
 
@@ -1387,9 +1412,9 @@ table.appendChild(row);
 }
 
 
-/* =========================================
+/* =====================================
    LOAD TRANSACTIONS
-========================================= */
+===================================== */
 
 async function loadTransactions(){
 
@@ -1407,7 +1432,10 @@ await supabaseClient
 .select(
 "id,type,amount,status,description,created_at"
 )
-.eq("user_id",currentUser.id)
+.eq(
+"user_id",
+currentUser.id
+)
 .order(
 "created_at",
 {
@@ -1422,7 +1450,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="5" class="error">
+<td
+colspan="5"
+class="error">
 
 Unable to load transactions:
 ${escapeHtml(error.message)}
@@ -1449,7 +1479,9 @@ table.innerHTML = `
 
 <tr>
 
-<td colspan="5" class="empty-state">
+<td
+colspan="5"
+class="empty-state">
 
 No simulated transactions yet.
 
@@ -1484,6 +1516,7 @@ data.length === 1
 
 table.innerHTML = "";
 
+
 data.forEach(transaction => {
 
 const row =
@@ -1508,7 +1541,9 @@ timeStyle:"short"
 row.innerHTML = `
 
 <td>
-${escapeHtml(transaction.type)}
+${escapeHtml(
+transaction.type
+)}
 </td>
 
 <td>
@@ -1551,9 +1586,9 @@ table.appendChild(row);
 }
 
 
-/* =========================================
-   UPDATE TOTAL
-========================================= */
+/* =====================================
+   TRADE TOTAL
+===================================== */
 
 function updateTradeTotal(){
 
@@ -1595,40 +1630,40 @@ maximumFractionDigits:2
 }
 
 
-/* =========================================
-   UPDATE TIME
-========================================= */
+/* =====================================
+   SELECT MARKET PRICE
+===================================== */
 
-function updateLastUpdated(){
+function setSelectedMarketPrice(){
+
+const asset =
+document.getElementById(
+"tradeAsset"
+).value;
 
 document.getElementById(
-"lastUpdated"
-).textContent =
-"Last updated: " +
-new Date().toLocaleTimeString(
-"en-US",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-);
+"tradePrice"
+).value =
+marketPrices[asset];
+
+updateTradeTotal();
 
 }
 
 
-/* =========================================
-   LOAD DASHBOARD
-========================================= */
+/* =====================================
+   START DASHBOARD
+===================================== */
 
 async function startDashboard(){
 
-try{
+setStatus(
+"Checking your account...",
+"loading"
+);
 
-/*
-Get logged-in user first.
-This is the only thing that blocks
-the initial dashboard.
-*/
+
+try{
 
 const {
 data,
@@ -1637,7 +1672,20 @@ error
 await supabaseClient.auth.getUser();
 
 
-if(error || !data.user){
+if(error){
+
+setStatus(
+"Authentication error: " +
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+if(!data.user){
 
 window.location.href =
 "login.html";
@@ -1650,10 +1698,6 @@ return;
 currentUser =
 data.user;
 
-
-/*
-Display information immediately.
-*/
 
 document.getElementById(
 "welcome"
@@ -1672,18 +1716,14 @@ document.getElementById(
 currentUser.email;
 
 
-/*
-Display market immediately.
-*/
-
-displayMarketPrices();
-
-setSelectedMarketPrice();
+setStatus(
+"Connected successfully.",
+"success"
+);
 
 
 /*
-Load database sections
-INDEPENDENTLY.
+Load each section separately.
 */
 
 loadBalance();
@@ -1695,20 +1735,28 @@ loadTrades();
 loadTransactions();
 
 
-updateLastUpdated();
+document.getElementById(
+"lastUpdated"
+).textContent =
+"Last updated: " +
+new Date().toLocaleTimeString(
+"en-US",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
 
 }
 
 catch(error){
 
-console.error(
-"Dashboard error:",
-error
-);
+console.error(error);
 
-showError(
+setStatus(
 "Dashboard error: " +
-error.message
+error.message,
+"error"
 );
 
 }
@@ -1716,53 +1764,9 @@ error.message
 }
 
 
-/* =========================================
-   ASSET CHANGE
-========================================= */
-
-document.getElementById(
-"tradeAsset"
-).addEventListener(
-"change",
-setSelectedMarketPrice
-);
-
-
-/* =========================================
-   AMOUNT CHANGE
-========================================= */
-
-document.getElementById(
-"tradeAmount"
-).addEventListener(
-"input",
-updateTradeTotal
-);
-
-
-/* =========================================
-   PRICE CHANGE
-========================================= */
-
-document.getElementById(
-"tradePrice"
-).addEventListener(
-"input",
-updateTradeTotal
-);
-
-
-/* =========================================
-   EXECUTE TRADE
-========================================= */
-
-document.getElementById(
-"tradeButton"
-).addEventListener(
-"click",
-executeTrade
-);
-
+/* =====================================
+   TRADE
+===================================== */
 
 async function executeTrade(){
 
@@ -1836,12 +1840,6 @@ button.textContent =
 "Processing...";
 
 
-showTradeMessage(
-"",
-""
-);
-
-
 try{
 
 const {
@@ -1859,11 +1857,6 @@ p_price:price
 
 
 if(error){
-
-console.error(
-"Trade error:",
-error
-);
 
 showTradeMessage(
 "Trade failed: " +
@@ -1897,11 +1890,6 @@ document.getElementById(
 updateTradeTotal();
 
 
-/*
-Refresh only the affected
-database sections.
-*/
-
 loadBalance();
 
 loadHoldings();
@@ -1910,13 +1898,9 @@ loadTrades();
 
 loadTransactions();
 
-updateLastUpdated();
-
 }
 
 catch(error){
-
-console.error(error);
 
 showTradeMessage(
 "Trade failed: " +
@@ -1938,27 +1922,91 @@ button.textContent =
 }
 
 
-/* =========================================
-   REFRESH
-========================================= */
+/* =====================================
+   EVENTS
+===================================== */
+
+document.getElementById(
+"tradeAsset"
+).addEventListener(
+"change",
+setSelectedMarketPrice
+);
+
+
+document.getElementById(
+"tradeAmount"
+).addEventListener(
+"input",
+updateTradeTotal
+);
+
+
+document.getElementById(
+"tradePrice"
+).addEventListener(
+"input",
+updateTradeTotal
+);
+
+
+document.getElementById(
+"tradeButton"
+).addEventListener(
+"click",
+executeTrade
+);
+
 
 document.getElementById(
 "refreshButton"
 ).addEventListener(
 "click",
+function(){
+
+startDashboard();
+
+}
+);
+
+
+document.getElementById(
+"logoutButton"
+).addEventListener(
+"click",
 async function(){
 
-const button = this;
+const {
+error
+} =
+await supabaseClient.auth.signOut();
 
-button.disabled = true;
 
-button.textContent =
-"Refreshing...";
+if(error){
 
-try{
+showError(error.message);
 
-await startDashboard();
+return;
 
 }
 
-  
+
+window.location.href =
+"login.html";
+
+}
+);
+
+
+/* =====================================
+   START
+===================================== */
+
+setSelectedMarketPrice();
+
+startDashboard();
+
+</script>
+
+</body>
+   </html>
