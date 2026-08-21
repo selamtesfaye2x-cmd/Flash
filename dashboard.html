@@ -10,10 +10,6 @@
 
   <style>
 
-    /* ================================
-       DASHBOARD ENHANCEMENTS
-    ================================= */
-
     .dashboard-header {
       display: flex;
       justify-content: space-between;
@@ -105,6 +101,71 @@
       margin-top: 0;
     }
 
+    .trading-section {
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+    }
+
+    .trading-form {
+      max-width: 650px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+    }
+
+    .trade-total {
+      padding: 13px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .trade-button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .trade-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .trade-message {
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    .trade-message.success {
+      color: green;
+    }
+
+    .trade-message.error {
+      color: #d00;
+    }
+
     .transaction-type-deposit {
       font-weight: 700;
     }
@@ -137,6 +198,12 @@
       margin-top: 8px;
     }
 
+    .trade-info {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 10px;
+    }
+
     @media (max-width: 600px) {
 
       .balance {
@@ -157,13 +224,8 @@
 
 </head>
 
-
 <body>
 
-
-<!-- ================================
-     NAVIGATION
-================================= -->
 
 <header class="navbar">
 
@@ -191,14 +253,10 @@
 
 
 
-<!-- ================================
-     MAIN DASHBOARD
-================================= -->
-
 <main class="container dashboard">
 
 
-  <!-- HEADER -->
+  <!-- DASHBOARD HEADER -->
 
   <div class="dashboard-header">
 
@@ -232,9 +290,7 @@
 
 
 
-  <!-- ================================
-       BALANCE CARD
-  ================================= -->
+  <!-- BALANCE -->
 
   <div class="balance-card">
 
@@ -260,12 +316,9 @@
 
 
 
-  <!-- ================================
-       SUMMARY CARDS
-  ================================= -->
+  <!-- SUMMARY -->
 
   <div class="cards">
-
 
     <div class="card">
 
@@ -305,14 +358,164 @@
 
     </div>
 
+  </div>
+
+
+
+  <!-- =================================
+       SIMULATED TRADING
+  ================================== -->
+
+  <div class="trading-section">
+
+    <h2>
+      Simulated Trading
+    </h2>
+
+    <p>
+      Practice buying and selling crypto using your simulated account.
+    </p>
+
+
+    <div class="trading-form">
+
+
+      <!-- ASSET -->
+
+      <div class="form-group">
+
+        <label for="tradeAsset">
+          Asset
+        </label>
+
+        <select id="tradeAsset">
+
+          <option value="BTC/USDT">
+            BTC/USDT
+          </option>
+
+          <option value="ETH/USDT">
+            ETH/USDT
+          </option>
+
+          <option value="SOL/USDT">
+            SOL/USDT
+          </option>
+
+          <option value="BNB/USDT">
+            BNB/USDT
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- BUY / SELL -->
+
+      <div class="form-group">
+
+        <label for="tradeSide">
+          Trade Type
+        </label>
+
+        <select id="tradeSide">
+
+          <option value="BUY">
+            BUY
+          </option>
+
+          <option value="SELL">
+            SELL
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- AMOUNT -->
+
+      <div class="form-group">
+
+        <label for="tradeAmount">
+          Amount of Crypto
+        </label>
+
+        <input
+          type="number"
+          id="tradeAmount"
+          min="0"
+          step="0.00000001"
+          placeholder="Example: 0.01">
+
+      </div>
+
+
+
+      <!-- PRICE -->
+
+      <div class="form-group">
+
+        <label for="tradePrice">
+          Simulated Price (USDT)
+        </label>
+
+        <input
+          type="number"
+          id="tradePrice"
+          min="0"
+          step="0.01"
+          placeholder="Example: 60000">
+
+      </div>
+
+
+
+      <!-- TOTAL -->
+
+      <div
+        class="trade-total"
+        id="tradeTotal">
+
+        Total: 0.00 USDT
+
+      </div>
+
+
+
+      <!-- BUTTON -->
+
+      <button
+        id="tradeButton"
+        class="trade-button">
+
+        Execute Simulated Trade
+
+      </button>
+
+
+      <div
+        id="tradeMessage"
+        class="trade-message">
+      </div>
+
+
+      <div class="trade-info">
+
+        Trades are simulated and do not involve real cryptocurrency.
+
+      </div>
+
+    </div>
 
   </div>
 
 
 
-  <!-- ================================
-       ACCOUNT BALANCE
-  ================================= -->
+  <!-- ACCOUNT BALANCE -->
 
   <div class="table-container">
 
@@ -341,7 +544,6 @@
         </tr>
 
       </thead>
-
 
       <tbody>
 
@@ -375,9 +577,7 @@
 
 
 
-  <!-- ================================
-       TRANSACTION HISTORY
-  ================================= -->
+  <!-- TRANSACTION HISTORY -->
 
   <div class="table-container">
 
@@ -415,7 +615,6 @@
 
       </thead>
 
-
       <tbody id="transactionsTable">
 
         <tr>
@@ -450,16 +649,11 @@
 
 
 
-<!-- ================================
-     SUPABASE
-================================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="Supabase.js"></script>
 
 <script src="app.js"></script>
-
 
 
 <script>
@@ -470,11 +664,6 @@
 ========================================= */
 
 async function loadDashboard() {
-
-
-  /* -----------------------------------------
-     CHECK LOGIN
-  ----------------------------------------- */
 
   const {
     data: { user },
@@ -492,11 +681,6 @@ async function loadDashboard() {
 
   }
 
-
-
-  /* -----------------------------------------
-     USER INFORMATION
-  ----------------------------------------- */
 
   const fullName =
     user.user_metadata?.full_name ||
@@ -517,9 +701,7 @@ async function loadDashboard() {
 
 
 
-  /* -----------------------------------------
-     LOAD BALANCE
-  ----------------------------------------- */
+  /* LOAD BALANCE */
 
   const {
     data: balanceRow,
@@ -555,13 +737,7 @@ async function loadDashboard() {
   }
 
 
-
-  /* -----------------------------------------
-     CREATE BALANCE IF MISSING
-  ----------------------------------------- */
-
   if (!balanceRow) {
-
 
     const {
       data: newBalance,
@@ -586,12 +762,6 @@ async function loadDashboard() {
 
     if (insertError) {
 
-      console.error(
-        "BALANCE CREATION ERROR:",
-        insertError
-      );
-
-
       showError(
         "Unable to create your simulated balance: " +
         insertError.message
@@ -606,9 +776,7 @@ async function loadDashboard() {
       newBalance.simulated_usdt
     );
 
-
   } else {
-
 
     displayBalance(
       balanceRow.simulated_usdt
@@ -617,20 +785,10 @@ async function loadDashboard() {
   }
 
 
-
-  /* -----------------------------------------
-     LOAD TRANSACTIONS
-  ----------------------------------------- */
-
   await loadTransactions(
     user.id
   );
 
-
-
-  /* -----------------------------------------
-     LAST UPDATED
-  ----------------------------------------- */
 
   document.getElementById(
     "lastUpdated"
@@ -691,7 +849,6 @@ async function loadTransactions(
   userId
 ) {
 
-
   const {
     data: transactions,
     error
@@ -718,11 +875,6 @@ async function loadTransactions(
       "transactionsTable"
     );
 
-
-
-  /* -----------------------------------------
-     ERROR
-  ----------------------------------------- */
 
   if (error) {
 
@@ -757,16 +909,10 @@ async function loadTransactions(
     ).textContent =
       "Unable to load";
 
-
     return;
 
   }
 
-
-
-  /* -----------------------------------------
-     NO TRANSACTIONS
-  ----------------------------------------- */
 
   if (
     !transactions ||
@@ -795,16 +941,10 @@ async function loadTransactions(
     ).textContent =
       "No transactions";
 
-
     return;
 
   }
 
-
-
-  /* -----------------------------------------
-     TRANSACTION COUNT
-  ----------------------------------------- */
 
   document.getElementById(
     "transactionCount"
@@ -817,25 +957,17 @@ async function loadTransactions(
     );
 
 
-
-  /* -----------------------------------------
-     DISPLAY TRANSACTIONS
-  ----------------------------------------- */
-
   table.innerHTML = "";
 
 
   transactions.forEach(
     function(transaction) {
 
-
       const tr =
         document.createElement(
           "tr"
         );
 
-
-      /* Amount */
 
       const amount =
         Number(
@@ -848,8 +980,6 @@ async function loadTransactions(
           }
         );
 
-
-      /* Date */
 
       const date =
         transaction.created_at
@@ -867,8 +997,6 @@ async function loadTransactions(
             )
           : "-";
 
-
-      /* Type */
 
       const transactionType =
         String(
@@ -895,17 +1023,13 @@ async function loadTransactions(
 
         </td>
 
-
         <td>
 
-          ${amount}
-          USDT
+          ${amount} USDT
 
         </td>
 
-
-        <td
-          class="status">
+        <td class="status">
 
           ${escapeHtml(
             transaction.status ||
@@ -913,7 +1037,6 @@ async function loadTransactions(
           )}
 
         </td>
-
 
         <td>
 
@@ -923,7 +1046,6 @@ async function loadTransactions(
           )}
 
         </td>
-
 
         <td>
 
@@ -948,7 +1070,278 @@ async function loadTransactions(
 
 
 /* =========================================
-   ESCAPE HTML
+   TRADE TOTAL CALCULATION
+========================================= */
+
+function updateTradeTotal() {
+
+  const amount =
+    Number(
+      document.getElementById(
+        "tradeAmount"
+      ).value
+    );
+
+
+  const price =
+    Number(
+      document.getElementById(
+        "tradePrice"
+      ).value
+    );
+
+
+  const total =
+    Number.isFinite(amount) &&
+    Number.isFinite(price)
+      ? amount * price
+      : 0;
+
+
+  document.getElementById(
+    "tradeTotal"
+  ).textContent =
+    "Total: " +
+    total.toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    ) +
+    " USDT";
+
+}
+
+
+document
+  .getElementById(
+    "tradeAmount"
+  )
+  .addEventListener(
+    "input",
+    updateTradeTotal
+  );
+
+
+document
+  .getElementById(
+    "tradePrice"
+  )
+  .addEventListener(
+    "input",
+    updateTradeTotal
+  );
+
+
+
+/* =========================================
+   TRADE MESSAGE
+========================================= */
+
+function showTradeMessage(
+  text,
+  type
+) {
+
+  const message =
+    document.getElementById(
+      "tradeMessage"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "trade-message " +
+    type;
+
+}
+
+
+
+/* =========================================
+   EXECUTE SIMULATED TRADE
+========================================= */
+
+document
+  .getElementById(
+    "tradeButton"
+  )
+  .addEventListener(
+    "click",
+    executeTrade
+  );
+
+
+async function executeTrade() {
+
+  const asset =
+    document.getElementById(
+      "tradeAsset"
+    ).value;
+
+
+  const side =
+    document.getElementById(
+      "tradeSide"
+    ).value;
+
+
+  const amount =
+    Number(
+      document.getElementById(
+        "tradeAmount"
+      ).value
+    );
+
+
+  const price =
+    Number(
+      document.getElementById(
+        "tradePrice"
+      ).value
+    );
+
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+
+    showTradeMessage(
+      "Please enter a valid crypto amount.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !Number.isFinite(price) ||
+    price <= 0
+  ) {
+
+    showTradeMessage(
+      "Please enter a valid simulated price.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const total =
+    amount * price;
+
+
+  const button =
+    document.getElementById(
+      "tradeButton"
+    );
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    "Processing...";
+
+
+  showTradeMessage(
+    "",
+    ""
+  );
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.rpc(
+      "create_simulated_trade",
+      {
+        p_asset:
+          asset,
+
+        p_side:
+          side,
+
+        p_amount:
+          amount,
+
+        p_price:
+          price
+      }
+    );
+
+
+  button.disabled =
+    false;
+
+
+  button.textContent =
+    "Execute Simulated Trade";
+
+
+  if (error) {
+
+    console.error(
+      "TRADE ERROR:",
+      error
+    );
+
+
+    showTradeMessage(
+      "Trade failed: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  showTradeMessage(
+    side +
+    " simulated successfully: " +
+    amount +
+    " " +
+    asset +
+    " for " +
+    total.toFixed(2) +
+    " USDT.",
+    "success"
+  );
+
+
+  /* Clear trade amount */
+
+  document.getElementById(
+    "tradeAmount"
+  ).value = "";
+
+
+  updateTradeTotal();
+
+
+  /* Refresh balance */
+
+  await loadDashboard();
+
+}
+
+
+
+/* =========================================
+   SECURITY
 ========================================= */
 
 function escapeHtml(
@@ -974,7 +1367,7 @@ function escapeHtml(
 
 
 /* =========================================
-   ERROR MESSAGE
+   GENERAL ERROR
 ========================================= */
 
 function showError(
@@ -1003,7 +1396,7 @@ function showError(
 
 
 /* =========================================
-   REFRESH BUTTON
+   REFRESH
 ========================================= */
 
 document
@@ -1053,7 +1446,6 @@ document
     "click",
     async function() {
 
-
       const {
         error
       } =
@@ -1080,13 +1472,12 @@ document
 
 
 /* =========================================
-   START DASHBOARD
+   START
 ========================================= */
 
 loadDashboard();
 
-
 </script>
 
 </body>
-  </html>
+        </html>
