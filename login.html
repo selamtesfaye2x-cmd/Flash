@@ -1,82 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — CryptoSim</title>
-  <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login — CryptoSim</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">Crypto<span>Sim</span></div>
+<header class="navbar">
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="register.html" class="nav-button">Create Account</a>
-    </nav>
-  </header>
+<div class="logo">
+Crypto<span>Sim</span>
+</div>
 
-  <main>
-    <section class="auth-section">
+<nav>
+<a href="index.html">Home</a>
+<a href="register.html">Create Account</a>
+</nav>
 
-      <div class="auth-card">
+</header>
 
-        <div class="badge">SIMULATION PLATFORM</div>
 
-        <h1>Welcome Back</h1>
+<main class="container">
 
-        <p class="auth-subtitle">
-          Login to your simulated crypto account.
-        </p>
+<div class="form-container">
 
-        <form id="loginForm">
+<h1>Login</h1>
 
-          <label for="email">Email Address</label>
+<p>Login to your simulated trading account.</p>
 
-          <input
-            type="email"
-            id="email"
-            placeholder="you@example.com"
-            required
-          >
 
-          <label for="password">Password</label>
+<form id="loginForm">
 
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            required
-          >
+<div class="form-group">
 
-          <button type="submit" class="btn primary auth-button">
-            Login
-          </button>
+<label for="email">
+Email
+</label>
 
-        </form>
+<input
+type="email"
+id="email"
+placeholder="Enter your email"
+required>
 
-        <p id="loginMessage" class="message"></p>
+</div>
 
-        <p class="auth-footer">
-          Don't have an account?
-          <a href="register.html">Create one</a>
-        </p>
 
-        <div class="simulation-note">
-          This is a simulation website. Account balances and transactions
-          have no real monetary value.
-        </div>
+<div class="form-group">
 
-      </div>
+<label for="password">
+Password
+</label>
 
-    </section>
-  </main>
+<input
+type="password"
+id="password"
+placeholder="Enter your password"
+required>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="Supabase.js"></script>
-  <script src="app.js"></script>
+</div>
+
+
+<button
+type="submit"
+class="btn-primary"
+id="loginButton">
+
+Login
+
+</button>
+
+
+<div
+id="loginMessage"
+class="message">
+</div>
+
+</form>
+
+
+<p>
+Don't have an account?
+<a href="register.html">
+Create one
+</a>
+</p>
+
+</div>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- YOUR SUPABASE CONNECTION -->
+
+<script src="Supabase.js"></script>
+
+
+<script>
+
+/* =========================
+   LOGIN
+========================= */
+
+const loginForm =
+document.getElementById("loginForm");
+
+
+loginForm.addEventListener(
+"submit",
+async function(event) {
+
+event.preventDefault();
+
+
+const email =
+document.getElementById("email")
+.value
+.trim();
+
+
+const password =
+document.getElementById("password")
+.value;
+
+
+const message =
+document.getElementById("loginMessage");
+
+
+const button =
+document.getElementById("loginButton");
+
+
+message.style.display = "block";
+
+message.className = "message";
+
+message.textContent =
+"Logging in...";
+
+
+button.disabled = true;
+
+button.textContent =
+"Logging in...";
+
+
+try {
+
+/* CHECK SUPABASE */
+
+if (
+typeof supabaseClient === "undefined"
+) {
+
+throw new Error(
+"Supabase connection is not loaded. Check Supabase.js."
+);
+
+}
+
+
+/* LOGIN */
+
+const {
+data,
+error
+} =
+await supabaseClient.auth.signInWithPassword({
+
+email: email,
+
+password: password
+
+});
+
+
+if(error) {
+
+throw error;
+
+}
+
+
+/* SUCCESS */
+
+message.className =
+"message success";
+
+message.textContent =
+"Login successful!";
+
+
+setTimeout(
+function() {
+
+window.location.href =
+"dashboard.html";
+
+},
+800
+);
+
+
+}
+catch(error) {
+
+console.error(
+"LOGIN ERROR:",
+error
+);
+
+
+message.className =
+"message error";
+
+message.textContent =
+error.message;
+
+button.disabled = false;
+
+button.textContent =
+"Login";
+
+}
+
+});
+
+</script>
 
 </body>
-</html>
+  </html>
