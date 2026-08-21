@@ -5,6 +5,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard — CryptoSim</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .admin-section {
+      margin-top: 25px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+    }
+
+    .admin-section h2 {
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+    }
+
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .transaction-form {
+      max-width: 600px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .balance-preview {
+      margin: 10px 0 15px;
+      font-weight: 600;
+    }
+  </style>
 </head>
 
 <body>
@@ -22,25 +78,102 @@
 
   <h1>Admin Dashboard</h1>
 
-  <p>Manage simulated user balances.</p>
+  <p>Manage simulated user balances and transactions.</p>
 
-  <div class="table-container">
+  <!-- TRANSACTION SECTION -->
+  <div class="admin-section">
 
-    <table>
-      <thead>
-        <tr>
-          <th>User ID</th>
-          <th>Simulated USDT</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+    <h2>Create Transaction</h2>
 
-      <tbody id="usersTable">
-        <tr>
-          <td colspan="3">Loading users...</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="transaction-form">
+
+      <div class="form-group">
+        <label for="transactionUser">
+          Select User
+        </label>
+
+        <select id="transactionUser">
+          <option value="">Loading users...</option>
+        </select>
+      </div>
+
+      <div class="balance-preview" id="selectedBalance">
+        Current Balance: —
+      </div>
+
+      <div class="form-group">
+        <label for="transactionType">
+          Transaction Type
+        </label>
+
+        <select id="transactionType">
+          <option value="Deposit">Deposit</option>
+          <option value="Withdrawal">Withdrawal</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="transactionAmount">
+          Amount (USDT)
+        </label>
+
+        <input
+          type="number"
+          id="transactionAmount"
+          min="0"
+          step="0.01"
+          placeholder="Enter amount"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="transactionDescription">
+          Description
+        </label>
+
+        <textarea
+          id="transactionDescription"
+          placeholder="Enter transaction description"
+        ></textarea>
+      </div>
+
+      <button
+        id="createTransactionButton"
+        class="btn">
+        Create Transaction
+      </button>
+
+    </div>
+
+    <p id="transactionMessage" class="message"></p>
+
+  </div>
+
+
+  <!-- EXISTING BALANCE MANAGEMENT -->
+  <div class="admin-section">
+
+    <h2>Manage Simulated Balances</h2>
+
+    <div class="table-container">
+
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Simulated USDT</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="usersTable">
+          <tr>
+            <td colspan="3">Loading users...</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
 
   </div>
 
@@ -48,87 +181,20 @@
 
 </main>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="Supabase.js"></script>
 <script src="app.js"></script>
 
+
 <script>
 
-async function loadAdminDashboard() {
+let userBalances = [];
 
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
 
-  if (userError || !user) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  // Check admin status
-  const { data: adminStatus, error: adminError } =
-    await supabaseClient.rpc("is_admin");
-
-  if (adminError) {
-    showError("Admin check failed: " + adminError.message);
-    return;
-  }
-
-  if (!adminStatus) {
-    showError("Access denied. Administrator account required.");
-    return;
-  }
-
-  // Load simulated balances
-  const { data: balances, error: balanceError } =
-    await supabaseClient
-      .from("user_balances")
-      .select("id, user_id, simulated_usdt");
-
-  if (balanceError) {
-    showError("Database error: " + balanceError.message);
-    return;
-  }
-
-  const table = document.getElementById("usersTable");
-
-  table.innerHTML = "";
-
-  if (!balances || balances.length === 0) {
-    table.innerHTML =
-      "<tr><td colspan='3'>No users found.</td></tr>";
-    return;
-  }
-
-  balances.forEach(function(row) {
-
-    const tr = document.createElement("tr");
-
-    const balance = Number(row.simulated_usdt || 0);
-
-    tr.innerHTML = `
-      <td>${row.user_id}</td>
-
-      <td>
-        ${balance.toFixed(2)} USDT
-      </td>
-
-      <td>
-        <button
-          class="btn"
-          onclick="changeBalance('${row.id}', ${balance})">
-          Edit Balance
-        </button>
-      </td>
-    `;
-
-    table.appendChild(tr);
-
-  });
-
-}
-
+/* ================================
+   MESSAGE FUNCTIONS
+================================ */
 
 function showError(text) {
 
@@ -145,35 +211,522 @@ function showError(text) {
 }
 
 
-async function changeBalance(balanceId, currentBalance) {
+function showTransactionMessage(text, type) {
 
-  const newBalance = prompt(
-    "Enter the new simulated USDT balance:",
-    currentBalance
-  );
+  const message =
+    document.getElementById("transactionMessage");
 
-  if (newBalance === null) {
+  message.textContent = text;
+
+  message.className =
+    "message " + type;
+
+  message.style.display =
+    "block";
+}
+
+
+/* ================================
+   ADMIN DASHBOARD
+================================ */
+
+async function loadAdminDashboard() {
+
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+
+    window.location.href =
+      "login.html";
+
     return;
   }
 
-  const amount = Number(newBalance);
 
-  if (!Number.isFinite(amount) || amount < 0) {
+  /* Check admin */
+
+  const {
+    data: adminStatus,
+    error: adminError
+  } =
+    await supabaseClient.rpc("is_admin");
+
+  if (adminError) {
+
+    showError(
+      "Admin check failed: " +
+      adminError.message
+    );
+
+    return;
+  }
+
+
+  if (!adminStatus) {
+
+    showError(
+      "Access denied. Administrator account required."
+    );
+
+    return;
+  }
+
+
+  /* Load balances */
+
+  const {
+    data: balances,
+    error: balanceError
+  } =
+    await supabaseClient
+      .from("user_balances")
+      .select(
+        "id, user_id, simulated_usdt"
+      );
+
+
+  if (balanceError) {
+
+    showError(
+      "Database error: " +
+      balanceError.message
+    );
+
+    return;
+  }
+
+
+  userBalances =
+    balances || [];
+
+
+  /* Populate transaction user selector */
+
+  const userSelect =
+    document.getElementById(
+      "transactionUser"
+    );
+
+  userSelect.innerHTML =
+    '<option value="">Select a user</option>';
+
+
+  userBalances.forEach(function(row) {
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      row.user_id;
+
+    option.textContent =
+      row.user_id +
+      " — " +
+      Number(
+        row.simulated_usdt || 0
+      ).toFixed(2) +
+      " USDT";
+
+    userSelect.appendChild(option);
+
+  });
+
+
+  /* Load balance table */
+
+  const table =
+    document.getElementById(
+      "usersTable"
+    );
+
+  table.innerHTML = "";
+
+
+  if (
+    !userBalances ||
+    userBalances.length === 0
+  ) {
+
+    table.innerHTML =
+      "<tr><td colspan='3'>No users found.</td></tr>";
+
+    return;
+  }
+
+
+  userBalances.forEach(function(row) {
+
+    const tr =
+      document.createElement("tr");
+
+    const balance =
+      Number(
+        row.simulated_usdt || 0
+      );
+
+
+    tr.innerHTML = `
+
+      <td>
+        ${row.user_id}
+      </td>
+
+      <td>
+        ${balance.toFixed(2)} USDT
+      </td>
+
+      <td>
+
+        <button
+          class="btn"
+          onclick="changeBalance(
+            '${row.id}',
+            ${balance}
+          )">
+
+          Edit Balance
+
+        </button>
+
+      </td>
+
+    `;
+
+
+    table.appendChild(tr);
+
+  });
+
+}
+
+
+/* ================================
+   SHOW SELECTED USER BALANCE
+================================ */
+
+document
+  .getElementById("transactionUser")
+  .addEventListener(
+    "change",
+    function() {
+
+      const userId =
+        this.value;
+
+      const balanceDisplay =
+        document.getElementById(
+          "selectedBalance"
+        );
+
+
+      if (!userId) {
+
+        balanceDisplay.textContent =
+          "Current Balance: —";
+
+        return;
+      }
+
+
+      const selected =
+        userBalances.find(
+          function(row) {
+
+            return row.user_id === userId;
+
+          }
+        );
+
+
+      if (!selected) {
+
+        balanceDisplay.textContent =
+          "Current Balance: —";
+
+        return;
+      }
+
+
+      const balance =
+        Number(
+          selected.simulated_usdt || 0
+        );
+
+
+      balanceDisplay.textContent =
+        "Current Balance: " +
+        balance.toFixed(2) +
+        " USDT";
+
+    }
+  );
+
+
+/* ================================
+   CREATE TRANSACTION
+================================ */
+
+document
+  .getElementById(
+    "createTransactionButton"
+  )
+  .addEventListener(
+    "click",
+    createTransaction
+  );
+
+
+async function createTransaction() {
+
+  const userId =
+    document.getElementById(
+      "transactionUser"
+    ).value;
+
+
+  const type =
+    document.getElementById(
+      "transactionType"
+    ).value;
+
+
+  const amount =
+    Number(
+      document.getElementById(
+        "transactionAmount"
+      ).value
+    );
+
+
+  const description =
+    document.getElementById(
+      "transactionDescription"
+    ).value.trim();
+
+
+  /* Validate user */
+
+  if (!userId) {
+
+    showTransactionMessage(
+      "Please select a user.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  /* Validate amount */
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+
+    showTransactionMessage(
+      "Please enter a valid amount greater than 0.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  /* Find selected user */
+
+  const selected =
+    userBalances.find(
+      function(row) {
+
+        return row.user_id === userId;
+
+      }
+    );
+
+
+  if (!selected) {
+
+    showTransactionMessage(
+      "Selected user could not be found.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const currentBalance =
+    Number(
+      selected.simulated_usdt || 0
+    );
+
+
+  /* Client-side withdrawal protection */
+
+  if (
+    type === "Withdrawal" &&
+    amount > currentBalance
+  ) {
+
+    showTransactionMessage(
+      "Insufficient simulated balance. Current balance is " +
+      currentBalance.toFixed(2) +
+      " USDT.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "createTransactionButton"
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Creating...";
+
+
+  /*
+    Call the database function.
+
+    The function handles:
+    - Balance update
+    - Transaction creation
+    - Withdrawal protection
+    - Atomic transaction processing
+  */
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.rpc(
+      "create_admin_transaction",
+      {
+        p_user_id: userId,
+        p_type: type,
+        p_amount: amount,
+        p_description:
+          description ||
+          "Admin-created simulated transaction"
+      }
+    );
+
+
+  button.disabled = false;
+
+  button.textContent =
+    "Create Transaction";
+
+
+  if (error) {
+
+    showTransactionMessage(
+      "Transaction failed: " +
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  showTransactionMessage(
+    "Transaction created successfully.",
+    "success"
+  );
+
+
+  /* Clear form */
+
+  document.getElementById(
+    "transactionAmount"
+  ).value = "";
+
+
+  document.getElementById(
+    "transactionDescription"
+  ).value = "";
+
+
+  /* Refresh dashboard */
+
+  await loadAdminDashboard();
+
+
+  document.getElementById(
+    "transactionUser"
+  ).value = "";
+
+
+  document.getElementById(
+    "selectedBalance"
+  ).textContent =
+    "Current Balance: —";
+
+}
+
+
+/* ================================
+   EDIT BALANCE
+================================ */
+
+async function changeBalance(
+  balanceId,
+  currentBalance
+) {
+
+  const newBalance =
+    prompt(
+      "Enter the new simulated USDT balance:",
+      currentBalance
+    );
+
+
+  if (newBalance === null) {
+
+    return;
+
+  }
+
+
+  const amount =
+    Number(newBalance);
+
+
+  if (
+    !Number.isFinite(amount) ||
+    amount < 0
+  ) {
 
     alert(
       "Please enter a valid non-negative number."
     );
 
     return;
+
   }
 
-  const { error } =
+
+  const {
+    error
+  } =
     await supabaseClient
       .from("user_balances")
       .update({
         simulated_usdt: amount
       })
       .eq("id", balanceId);
+
 
   if (error) {
 
@@ -183,19 +736,28 @@ async function changeBalance(balanceId, currentBalance) {
     );
 
     return;
+
   }
+
 
   alert(
     "Simulated balance updated successfully."
   );
+
 
   loadAdminDashboard();
 
 }
 
 
+/* ================================
+   LOGOUT
+================================ */
+
 document
-  .getElementById("logoutButton")
+  .getElementById(
+    "logoutButton"
+  )
   .addEventListener(
     "click",
     async function() {
@@ -208,6 +770,10 @@ document
     }
   );
 
+
+/* ================================
+   START
+================================ */
 
 loadAdminDashboard();
 
