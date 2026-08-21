@@ -11,234 +11,230 @@
 
 <style>
 
-.dashboard-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:25px;
-  flex-wrap:wrap;
+.dashboard-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:25px;
+flex-wrap:wrap;
 }
 
-.dashboard-header p {
-  opacity:.75;
+.dashboard-header p{
+opacity:.75;
 }
 
-.refresh-button {
-  padding:10px 16px;
-  border:none;
-  border-radius:7px;
-  cursor:pointer;
+.refresh-button{
+padding:10px 16px;
+border:none;
+border-radius:7px;
+cursor:pointer;
 }
 
-.balance-card {
-  padding:30px;
-  margin-bottom:25px;
-  border-radius:14px;
+.balance-card{
+padding:30px;
+margin-bottom:25px;
+border-radius:14px;
 }
 
-.balance {
-  font-size:38px;
-  font-weight:700;
-  margin-top:15px;
+.balance{
+font-size:38px;
+font-weight:700;
+margin-top:15px;
 }
 
-.balance-label {
-  font-size:14px;
-  opacity:.7;
+.balance-label{
+font-size:14px;
+opacity:.7;
 }
 
-.cards {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-bottom:25px;
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:25px;
 }
 
-.card {
-  padding:20px;
-  border-radius:12px;
+.card{
+padding:20px;
+border-radius:12px;
 }
 
-/* MARKET */
-
-.market-section {
-  margin-bottom:25px;
+.market-section{
+margin-bottom:25px;
 }
 
-.market-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
-  gap:10px;
-  flex-wrap:wrap;
+.market-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+gap:10px;
+flex-wrap:wrap;
 }
 
-.market-header h2 {
-  margin:0;
+.market-header h2{
+margin:0;
 }
 
-.market-note {
-  font-size:13px;
-  opacity:.65;
+.market-note{
+font-size:13px;
+opacity:.65;
 }
 
-.market-grid {
-  display:grid;
-  grid-template-columns:
-  repeat(auto-fit,minmax(190px,1fr));
-  gap:15px;
+.market-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+gap:15px;
 }
 
-.market-card {
-  padding:20px;
-  border-radius:12px;
+.market-card{
+padding:20px;
+border-radius:12px;
 }
 
-.market-symbol {
-  font-size:13px;
-  opacity:.7;
+.market-symbol{
+font-size:13px;
+opacity:.7;
 }
 
-.market-name {
-  font-size:18px;
-  font-weight:700;
-  margin-top:5px;
+.market-name{
+font-size:18px;
+font-weight:700;
+margin-top:5px;
 }
 
-.market-price {
-  font-size:23px;
-  font-weight:700;
-  margin-top:12px;
+.market-price{
+font-size:23px;
+font-weight:700;
+margin-top:12px;
 }
 
-.market-change {
-  margin-top:7px;
-  font-weight:600;
+.market-change{
+margin-top:7px;
+font-weight:600;
 }
 
-.change-positive {
-  color:green;
+.change-positive{
+color:green;
 }
 
-.change-negative {
-  color:#d00;
+.change-negative{
+color:#d00;
 }
 
-/* TRADING */
-
-.trading-section {
-  padding:22px;
-  margin-bottom:25px;
-  border-radius:14px;
+.trading-section{
+padding:22px;
+margin-bottom:25px;
+border-radius:14px;
 }
 
-.form-group {
-  margin-bottom:16px;
+.form-group{
+margin-bottom:16px;
 }
 
-.form-group label {
-  display:block;
-  margin-bottom:7px;
-  font-weight:600;
+.form-group label{
+display:block;
+margin-bottom:7px;
+font-weight:600;
 }
 
 .form-group input,
-.form-group select {
-  width:100%;
-  box-sizing:border-box;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:7px;
-  font-size:15px;
+.form-group select{
+width:100%;
+box-sizing:border-box;
+padding:12px;
+border:1px solid #ccc;
+border-radius:7px;
+font-size:15px;
 }
 
-.trade-total {
-  padding:13px;
-  margin-bottom:16px;
-  font-weight:600;
-  border-radius:8px;
+.trade-total{
+padding:13px;
+margin-bottom:16px;
+font-weight:600;
+border-radius:8px;
 }
 
-.trade-button {
-  width:100%;
-  padding:13px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:600;
+.trade-button{
+width:100%;
+padding:13px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+font-weight:600;
 }
 
-.trade-button:disabled {
-  opacity:.6;
+.trade-button:disabled{
+opacity:.6;
+cursor:not-allowed;
 }
 
-.trade-message {
-  margin-top:15px;
-  font-weight:600;
+.trade-message{
+margin-top:15px;
+font-weight:600;
 }
 
-.trade-message.success {
-  color:green;
+.trade-message.success{
+color:green;
 }
 
-.trade-message.error {
-  color:#d00;
+.trade-message.error{
+color:#d00;
 }
 
-/* TABLES */
-
-.table-container {
-  overflow-x:auto;
-  margin-bottom:25px;
-  border-radius:12px;
+.table-container{
+overflow-x:auto;
+margin-bottom:25px;
+border-radius:12px;
 }
 
-.table-container table {
-  width:100%;
-  border-collapse:collapse;
-  min-width:650px;
+.table-container table{
+width:100%;
+border-collapse:collapse;
+min-width:650px;
 }
 
 .table-container th,
-.table-container td {
-  padding:13px;
-  text-align:left;
-  border-bottom:1px solid #ddd;
+.table-container td{
+padding:13px;
+text-align:left;
+border-bottom:1px solid #ddd;
 }
 
-.empty-state {
-  text-align:center;
-  padding:25px !important;
-  opacity:.7;
+.empty-state{
+text-align:center;
+padding:25px !important;
+opacity:.7;
 }
 
-.error {
-  color:#d00;
+.error{
+color:#d00;
 }
 
-.last-updated {
-  font-size:13px;
-  opacity:.65;
+.loading{
+opacity:.7;
 }
 
-/* MOBILE */
+.last-updated{
+font-size:13px;
+opacity:.65;
+}
 
-@media(max-width:600px) {
+@media(max-width:600px){
 
-  .balance {
-    font-size:30px;
-  }
+.balance{
+font-size:30px;
+}
 
-  .balance-card {
-    padding:22px;
-  }
+.balance-card{
+padding:22px;
+}
 
-  .market-price {
-    font-size:21px;
-  }
+.market-price{
+font-size:21px;
+}
 
 }
 
@@ -246,7 +242,9 @@
 
 </head>
 
+
 <body>
+
 
 <header class="navbar">
 
@@ -269,6 +267,7 @@ Logout
 </nav>
 
 </header>
+
 
 
 <main class="container dashboard">
@@ -295,6 +294,7 @@ class="last-updated">
 
 </div>
 
+
 <button
 id="refreshButton"
 class="refresh-button">
@@ -304,6 +304,7 @@ class="refresh-button">
 </button>
 
 </div>
+
 
 
 <!-- BALANCE -->
@@ -325,12 +326,11 @@ USDT
 </div>
 
 <div class="balance-label">
-
 Simulated balance
-
 </div>
 
 </div>
+
 
 
 <!-- SUMMARY -->
@@ -378,6 +378,7 @@ Loading...
 </div>
 
 
+
 <!-- MARKET -->
 
 <div class="market-section">
@@ -389,7 +390,7 @@ Simulated Market
 </h2>
 
 <div class="market-note">
-Prices update every 5 seconds
+Prices are simulated
 </div>
 
 </div>
@@ -414,13 +415,12 @@ id="btcPrice">
 $78,000.00
 </div>
 
-<div
-class="market-change change-positive"
-id="btcChange">
+<div class="market-change change-positive">
 +2.35%
 </div>
 
 </div>
+
 
 
 <div class="market-card">
@@ -439,13 +439,12 @@ id="ethPrice">
 $2,450.00
 </div>
 
-<div
-class="market-change change-positive"
-id="ethChange">
+<div class="market-change change-positive">
 +1.82%
 </div>
 
 </div>
+
 
 
 <div class="market-card">
@@ -464,13 +463,12 @@ id="solPrice">
 $92.00
 </div>
 
-<div
-class="market-change change-positive"
-id="solChange">
+<div class="market-change change-positive">
 +3.14%
 </div>
 
 </div>
+
 
 
 <div class="market-card">
@@ -489,17 +487,17 @@ id="bnbPrice">
 $680.00
 </div>
 
-<div
-class="market-change change-negative"
-id="bnbChange">
+<div class="market-change change-negative">
 -0.74%
 </div>
 
 </div>
 
+
 </div>
 
 </div>
+
 
 
 <!-- TRADING -->
@@ -591,8 +589,7 @@ Simulated Price (USDT)
 type="number"
 id="tradePrice"
 min="0"
-step="0.01"
-placeholder="Select an asset">
+step="0.01">
 
 </div>
 
@@ -626,6 +623,7 @@ Trades are simulated and do not involve real cryptocurrency.
 </p>
 
 </div>
+
 
 
 <!-- HOLDINGS -->
@@ -662,8 +660,12 @@ Status
 
 <tr>
 
-<td colspan="3">
+<td
+colspan="3"
+class="loading">
+
 Loading holdings...
+
 </td>
 
 </tr>
@@ -675,7 +677,8 @@ Loading holdings...
 </div>
 
 
-<!-- TRADE HISTORY -->
+
+<!-- TRADES -->
 
 <div class="table-container">
 
@@ -725,8 +728,12 @@ Date
 
 <tr>
 
-<td colspan="7">
+<td
+colspan="7"
+class="loading">
+
 Loading trades...
+
 </td>
 
 </tr>
@@ -736,6 +743,7 @@ Loading trades...
 </table>
 
 </div>
+
 
 
 <!-- ACCOUNT BALANCE -->
@@ -799,6 +807,7 @@ Simulated
 </div>
 
 
+
 <!-- TRANSACTIONS -->
 
 <div class="table-container">
@@ -841,8 +850,12 @@ Date
 
 <tr>
 
-<td colspan="5">
+<td
+colspan="5"
+class="loading">
+
 Loading transactions...
+
 </td>
 
 </tr>
@@ -859,7 +872,1093 @@ id="message"
 class="message">
 </p>
 
+
 </main>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="Supabase.js"></script>
+
+<script src="app.js"></script>
+
+
+<script>
+
+
+/* =========================================
+   GLOBAL USER
+========================================= */
+
+let currentUser = null;
+
+
+/* =========================================
+   MARKET PRICES
+========================================= */
+
+const marketPrices = {
+
+"BTC/USDT":78000,
+
+"ETH/USDT":2450,
+
+"SOL/USDT":92,
+
+"BNB/USDT":680
+
+};
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(value){
+
+const div =
+document.createElement("div");
+
+div.textContent =
+value == null
+?
+""
+:
+String(value);
+
+return div.innerHTML;
+
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+function showError(text){
+
+const message =
+document.getElementById("message");
+
+message.textContent =
+text;
+
+message.className =
+"message error";
+
+message.style.display =
+"block";
+
+}
+
+
+/* =========================================
+   TRADE MESSAGE
+========================================= */
+
+function showTradeMessage(text,type){
+
+const message =
+document.getElementById("tradeMessage");
+
+message.textContent =
+text;
+
+message.className =
+"trade-message " + type;
+
+}
+
+
+/* =========================================
+   DISPLAY MARKET
+========================================= */
+
+function displayMarketPrices(){
+
+document.getElementById("btcPrice").textContent =
+"$" +
+marketPrices["BTC/USDT"].toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+document.getElementById("ethPrice").textContent =
+"$" +
+marketPrices["ETH/USDT"].toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+document.getElementById("solPrice").textContent =
+"$" +
+marketPrices["SOL/USDT"].toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+document.getElementById("bnbPrice").textContent =
+"$" +
+marketPrices["BNB/USDT"].toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+}
+
+
+/* =========================================
+   SET TRADE PRICE
+========================================= */
+
+function setSelectedMarketPrice(){
+
+const asset =
+document.getElementById("tradeAsset").value;
+
+const price =
+marketPrices[asset];
+
+document.getElementById("tradePrice").value =
+price;
+
+updateTradeTotal();
+
+}
+
+
+/* =========================================
+   BALANCE DISPLAY
+========================================= */
+
+function displayBalance(amount){
+
+const formatted =
+Number(amount || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+document.getElementById("balance").textContent =
+formatted;
+
+document.getElementById("tableBalance").textContent =
+formatted;
+
+}
+
+
+/* =========================================
+   LOAD BALANCE
+========================================= */
+
+async function loadBalance(){
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("user_balances")
+.select("simulated_usdt")
+.eq("user_id",currentUser.id)
+.maybeSingle();
+
+if(error){
+
+showError(
+"Unable to load balance: " +
+error.message
+);
+
+return;
+
+}
+
+
+if(!data){
+
+const {
+data:newData,
+error:insertError
+} =
+await supabaseClient
+.from("user_balances")
+.insert({
+
+user_id:currentUser.id,
+
+simulated_usdt:0
+
+})
+.select("simulated_usdt")
+.single();
+
+
+if(insertError){
+
+showError(
+"Unable to create balance: " +
+insertError.message
+);
+
+return;
+
+}
+
+displayBalance(newData.simulated_usdt);
+
+return;
+
+}
+
+
+displayBalance(data.simulated_usdt);
+
+}
+
+
+/* =========================================
+   LOAD HOLDINGS
+========================================= */
+
+async function loadHoldings(){
+
+const table =
+document.getElementById("holdingsTable");
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("simulated_holdings")
+.select("asset,quantity")
+.eq("user_id",currentUser.id)
+.order("asset");
+
+
+if(error){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="3" class="error">
+
+Unable to load holdings:
+${escapeHtml(error.message)}
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+if(!data || data.length === 0){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="3" class="empty-state">
+
+No simulated crypto holdings yet.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+table.innerHTML = "";
+
+data.forEach(item => {
+
+const row =
+document.createElement("tr");
+
+row.innerHTML = `
+
+<td>
+${escapeHtml(item.asset)}
+</td>
+
+<td>
+${Number(item.quantity || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:8
+}
+)}
+</td>
+
+<td>
+Simulated
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+}
+
+
+/* =========================================
+   LOAD TRADES
+========================================= */
+
+async function loadTrades(){
+
+const table =
+document.getElementById("tradesTable");
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("simulated_trades")
+.select(
+"asset,side,amount,price,total,status,created_at"
+)
+.eq("user_id",currentUser.id)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(error){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="7" class="error">
+
+Unable to load trades:
+${escapeHtml(error.message)}
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+if(!data || data.length === 0){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="7" class="empty-state">
+
+No simulated trades yet.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+table.innerHTML = "";
+
+data.forEach(trade => {
+
+const row =
+document.createElement("tr");
+
+const date =
+trade.created_at
+?
+new Date(
+trade.created_at
+).toLocaleString(
+"en-US",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+)
+:
+"-";
+
+
+row.innerHTML = `
+
+<td>
+${escapeHtml(trade.asset)}
+</td>
+
+<td>
+${escapeHtml(trade.side)}
+</td>
+
+<td>
+${Number(trade.amount || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:8
+}
+)}
+</td>
+
+<td>
+${Number(trade.price || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)}
+USDT
+</td>
+
+<td>
+${Number(trade.total || 0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)}
+USDT
+</td>
+
+<td>
+${escapeHtml(
+trade.status || "COMPLETED"
+)}
+</td>
+
+<td>
+${escapeHtml(date)}
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+}
+
+
+/* =========================================
+   LOAD TRANSACTIONS
+========================================= */
+
+async function loadTransactions(){
+
+const table =
+document.getElementById(
+"transactionsTable"
+);
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("transactions")
+.select(
+"id,type,amount,status,description,created_at"
+)
+.eq("user_id",currentUser.id)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(error){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="5" class="error">
+
+Unable to load transactions:
+${escapeHtml(error.message)}
+
+</td>
+
+</tr>
+
+`;
+
+document.getElementById(
+"transactionCount"
+).textContent =
+"Unable to load";
+
+return;
+
+}
+
+
+if(!data || data.length === 0){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="5" class="empty-state">
+
+No simulated transactions yet.
+
+</td>
+
+</tr>
+
+`;
+
+document.getElementById(
+"transactionCount"
+).textContent =
+"No transactions";
+
+return;
+
+}
+
+
+document.getElementById(
+"transactionCount"
+).textContent =
+data.length +
+(
+data.length === 1
+?
+" transaction"
+:
+" transactions"
+);
+
+
+table.innerHTML = "";
+
+data.forEach(transaction => {
+
+const row =
+document.createElement("tr");
+
+const date =
+transaction.created_at
+?
+new Date(
+transaction.created_at
+).toLocaleString(
+"en-US",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+)
+:
+"-";
+
+
+row.innerHTML = `
+
+<td>
+${escapeHtml(transaction.type)}
+</td>
+
+<td>
+${Number(
+transaction.amount || 0
+).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)}
+USDT
+</td>
+
+<td>
+${escapeHtml(
+transaction.status ||
+"Completed"
+)}
+</td>
+
+<td>
+${escapeHtml(
+transaction.description ||
+"-"
+)}
+</td>
+
+<td>
+${escapeHtml(date)}
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+}
+
+
+/* =========================================
+   UPDATE TOTAL
+========================================= */
+
+function updateTradeTotal(){
+
+const amount =
+Number(
+document.getElementById(
+"tradeAmount"
+).value
+);
+
+const price =
+Number(
+document.getElementById(
+"tradePrice"
+).value
+);
+
+const total =
+Number.isFinite(amount) &&
+Number.isFinite(price)
+?
+amount * price
+:
+0;
+
+document.getElementById(
+"tradeTotal"
+).textContent =
+"Total: " +
+total.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+) +
+" USDT";
+
+}
+
+
+/* =========================================
+   UPDATE TIME
+========================================= */
+
+function updateLastUpdated(){
+
+document.getElementById(
+"lastUpdated"
+).textContent =
+"Last updated: " +
+new Date().toLocaleTimeString(
+"en-US",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}
+
+
+/* =========================================
+   LOAD DASHBOARD
+========================================= */
+
+async function startDashboard(){
+
+try{
+
+/*
+Get logged-in user first.
+This is the only thing that blocks
+the initial dashboard.
+*/
+
+const {
+data,
+error
+} =
+await supabaseClient.auth.getUser();
+
+
+if(error || !data.user){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+
+currentUser =
+data.user;
+
+
+/*
+Display information immediately.
+*/
+
+document.getElementById(
+"welcome"
+).textContent =
+"Welcome, " +
+(
+currentUser.user_metadata?.full_name ||
+currentUser.email ||
+"User"
+);
+
+
+document.getElementById(
+"userEmail"
+).textContent =
+currentUser.email;
+
+
+/*
+Display market immediately.
+*/
+
+displayMarketPrices();
+
+setSelectedMarketPrice();
+
+
+/*
+Load database sections
+INDEPENDENTLY.
+*/
+
+loadBalance();
+
+loadHoldings();
+
+loadTrades();
+
+loadTransactions();
+
+
+updateLastUpdated();
+
+}
+
+catch(error){
+
+console.error(
+"Dashboard error:",
+error
+);
+
+showError(
+"Dashboard error: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================================
+   ASSET CHANGE
+========================================= */
+
+document.getElementById(
+"tradeAsset"
+).addEventListener(
+"change",
+setSelectedMarketPrice
+);
+
+
+/* =========================================
+   AMOUNT CHANGE
+========================================= */
+
+document.getElementById(
+"tradeAmount"
+).addEventListener(
+"input",
+updateTradeTotal
+);
+
+
+/* =========================================
+   PRICE CHANGE
+========================================= */
+
+document.getElementById(
+"tradePrice"
+).addEventListener(
+"input",
+updateTradeTotal
+);
+
+
+/* =========================================
+   EXECUTE TRADE
+========================================= */
+
+document.getElementById(
+"tradeButton"
+).addEventListener(
+"click",
+executeTrade
+);
+
+
+async function executeTrade(){
+
+const asset =
+document.getElementById(
+"tradeAsset"
+).value;
+
+const side =
+document.getElementById(
+"tradeSide"
+).value;
+
+const amount =
+Number(
+document.getElementById(
+"tradeAmount"
+).value
+);
+
+const price =
+Number(
+document.getElementById(
+"tradePrice"
+).value
+);
+
+
+if(
+!Number.isFinite(amount) ||
+amount <= 0
+){
+
+showTradeMessage(
+"Please enter a valid crypto amount.",
+"error"
+);
+
+return;
+
+}
+
+
+if(
+!Number.isFinite(price) ||
+price <= 0
+){
+
+showTradeMessage(
+"Please enter a valid simulated price.",
+"error"
+);
+
+return;
+
+}
+
+
+const total =
+amount * price;
+
+
+const button =
+document.getElementById(
+"tradeButton"
+);
+
+button.disabled = true;
+
+button.textContent =
+"Processing...";
+
+
+showTradeMessage(
+"",
+""
+);
+
+
+try{
+
+const {
+error
+} =
+await supabaseClient.rpc(
+"create_simulated_trade",
+{
+p_asset:asset,
+p_side:side,
+p_amount:amount,
+p_price:price
+}
+);
+
+
+if(error){
+
+console.error(
+"Trade error:",
+error
+);
+
+showTradeMessage(
+"Trade failed: " +
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+showTradeMessage(
+side +
+" simulated successfully: " +
+amount +
+" " +
+asset +
+" for " +
+total.toFixed(2) +
+" USDT.",
+"success"
+);
+
+
+document.getElementById(
+"tradeAmount"
+).value = "";
+
+
+updateTradeTotal();
+
+
+/*
+Refresh only the affected
+database sections.
+*/
+
+loadBalance();
+
+loadHoldings();
+
+loadTrades();
+
+loadTransactions();
+
+updateLastUpdated();
+
+}
+
+catch(error){
+
+console.error(error);
+
+showTradeMessage(
+"Trade failed: " +
+error.message,
+"error"
+);
+
+}
+
+finally{
+
+button.disabled = false;
+
+button.textContent =
+"Execute Simulated Trade";
+
+}
+
+}
+
+
+/* =========================================
+   REFRESH
+========================================= */
+
+document.getElementById(
+"refreshButton"
+).addEventListener(
+"click",
+async function(){
+
+const button = this;
+
+button.disabled = true;
+
+button.textContent =
+"Refreshing...";
+
+try{
+
+await startDashboard();
+
+}
+
+  
