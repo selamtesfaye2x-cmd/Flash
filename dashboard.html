@@ -49,6 +49,9 @@
 
   </div>
 
+
+  <!-- BALANCE -->
+
   <div class="table-container">
 
     <h2>Account Balance</h2>
@@ -67,9 +70,11 @@
 
         <tr>
           <td>USDT</td>
+
           <td>
             <span id="tableBalance">0.00</span>
           </td>
+
           <td>Simulated</td>
         </tr>
 
@@ -78,6 +83,9 @@
     </table>
 
   </div>
+
+
+  <!-- TRANSACTIONS -->
 
   <div class="table-container">
 
@@ -98,7 +106,9 @@
       <tbody id="transactionsTable">
 
         <tr>
-          <td colspan="5">Loading transactions...</td>
+          <td colspan="5">
+            Loading transactions...
+          </td>
         </tr>
 
       </tbody>
@@ -106,6 +116,7 @@
     </table>
 
   </div>
+
 
   <p id="message" class="message"></p>
 
@@ -116,6 +127,7 @@
 <script src="Supabase.js"></script>
 <script src="app.js"></script>
 
+
 <script>
 
 async function loadDashboard() {
@@ -125,23 +137,31 @@ async function loadDashboard() {
     error: userError
   } = await supabaseClient.auth.getUser();
 
+
   if (userError || !user) {
+
     window.location.href = "login.html";
     return;
+
   }
 
+
+  // USER INFORMATION
 
   const fullName =
     user.user_metadata?.full_name || user.email;
 
+
   document.getElementById("welcome").textContent =
     "Welcome, " + fullName;
+
 
   document.getElementById("userEmail").textContent =
     user.email;
 
 
-  // Load this user's simulated balance
+  // LOAD BALANCE
+
   const {
     data: balanceRow,
     error: balanceError
@@ -157,7 +177,8 @@ async function loadDashboard() {
     console.error(balanceError);
 
     showError(
-      "Unable to load your simulated balance."
+      "Unable to load your simulated balance: " +
+      balanceError.message
     );
 
     return;
@@ -165,7 +186,8 @@ async function loadDashboard() {
   }
 
 
-  // Create a balance if one does not exist
+  // CREATE BALANCE IF MISSING
+
   if (!balanceRow) {
 
     const {
@@ -186,7 +208,8 @@ async function loadDashboard() {
       console.error(insertError);
 
       showError(
-        "Unable to create your simulated balance."
+        "Unable to create your simulated balance: " +
+        insertError.message
       );
 
       return;
@@ -207,11 +230,14 @@ async function loadDashboard() {
   }
 
 
-  // Load transactions
+  // LOAD TRANSACTIONS
+
   await loadTransactions(user.id);
 
 }
 
+
+/* DISPLAY BALANCE */
 
 function displayBalance(amount) {
 
@@ -228,11 +254,14 @@ function displayBalance(amount) {
   document.getElementById("balance").textContent =
     formatted;
 
+
   document.getElementById("tableBalance").textContent =
     formatted;
 
 }
 
+
+/* LOAD TRANSACTIONS */
 
 async function loadTransactions(userId) {
 
@@ -251,18 +280,35 @@ async function loadTransactions(userId) {
 
 
   const table =
-    document.getElementById("transactionsTable");
+    document.getElementById(
+      "transactionsTable"
+    );
 
+
+  /* SHOW ACTUAL SUPABASE ERROR */
 
   if (error) {
 
-    console.error(error);
+    console.error(
+      "TRANSACTION ERROR:",
+      error
+    );
+
 
     table.innerHTML =
-      "<tr><td colspan='5'>Unable to load transactions.</td></tr>";
+      "<tr>" +
+      "<td colspan='5'>" +
+      "Transaction error: " +
+      escapeHtml(error.message) +
+      "</td>" +
+      "</tr>";
 
-    document.getElementById("transactionCount").textContent =
+
+    document.getElementById(
+      "transactionCount"
+    ).textContent =
       "Unable to load";
+
 
     return;
 
@@ -272,105 +318,157 @@ async function loadTransactions(userId) {
   table.innerHTML = "";
 
 
-  if (!transactions || transactions.length === 0) {
+  /* NO TRANSACTIONS */
+
+  if (
+    !transactions ||
+    transactions.length === 0
+  ) {
 
     table.innerHTML =
-      "<tr><td colspan='5'>No simulated transactions yet.</td></tr>";
+      "<tr>" +
+      "<td colspan='5'>" +
+      "No simulated transactions yet." +
+      "</td>" +
+      "</tr>";
 
-    document.getElementById("transactionCount").textContent =
+
+    document.getElementById(
+      "transactionCount"
+    ).textContent =
       "No transactions";
+
 
     return;
 
   }
 
 
-  document.getElementById("transactionCount").textContent =
+  /* TRANSACTION COUNT */
+
+  document.getElementById(
+    "transactionCount"
+  ).textContent =
     transactions.length +
-    (transactions.length === 1
-      ? " transaction"
-      : " transactions");
+    (
+      transactions.length === 1
+        ? " transaction"
+        : " transactions"
+    );
 
 
-  transactions.forEach(function(transaction) {
+  /* DISPLAY TRANSACTIONS */
 
-    const tr =
-      document.createElement("tr");
+  transactions.forEach(
+    function(transaction) {
 
-
-    const amount =
-      Number(transaction.amount || 0).toLocaleString(
-        "en-US",
-        {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }
-      );
+      const tr =
+        document.createElement("tr");
 
 
-    const date =
-      new Date(
-        transaction.created_at
-      ).toLocaleString(
-        "en-US",
-        {
-          dateStyle: "medium",
-          timeStyle: "short"
-        }
-      );
+      const amount =
+        Number(
+          transaction.amount || 0
+        ).toLocaleString(
+          "en-US",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
 
 
-    tr.innerHTML = `
-      <td>${escapeHtml(transaction.type)}</td>
-
-      <td>${amount} USDT</td>
-
-      <td>${escapeHtml(transaction.status)}</td>
-
-      <td>${escapeHtml(
-        transaction.description || "-"
-      )}</td>
-
-      <td>${date}</td>
-    `;
+      const date =
+        new Date(
+          transaction.created_at
+        ).toLocaleString(
+          "en-US",
+          {
+            dateStyle: "medium",
+            timeStyle: "short"
+          }
+        );
 
 
-    table.appendChild(tr);
+      tr.innerHTML = `
 
-  });
+        <td>
+          ${escapeHtml(transaction.type)}
+        </td>
+
+        <td>
+          ${amount} USDT
+        </td>
+
+        <td>
+          ${escapeHtml(transaction.status)}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            transaction.description || "-"
+          )}
+        </td>
+
+        <td>
+          ${date}
+        </td>
+
+      `;
+
+
+      table.appendChild(tr);
+
+    }
+  );
 
 }
 
+
+/* SECURITY */
 
 function escapeHtml(value) {
 
   const div =
     document.createElement("div");
 
+
   div.textContent =
-    value == null ? "" : String(value);
+    value == null
+      ? ""
+      : String(value);
+
 
   return div.innerHTML;
 
 }
 
 
+/* ERROR MESSAGE */
+
 function showError(text) {
 
   const message =
-    document.getElementById("message");
+    document.getElementById(
+      "message"
+    );
+
 
   message.textContent =
     text;
 
+
   message.className =
     "message error";
+
 
   message.style.display =
     "block";
 
 }
 
+
+/* LOGOUT */
 
 document
   .getElementById("logoutButton")
@@ -381,13 +479,17 @@ document
       const { error } =
         await supabaseClient.auth.signOut();
 
+
       if (error) {
 
-        showError(error.message);
+        showError(
+          error.message
+        );
 
         return;
 
       }
+
 
       window.location.href =
         "login.html";
@@ -395,6 +497,8 @@ document
     }
   );
 
+
+/* START */
 
 loadDashboard();
 
