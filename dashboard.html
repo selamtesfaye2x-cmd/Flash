@@ -1,652 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Dashboard — CryptoSim</title>
+<title>Dashboard — CryptoSim</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-  <style>
+<style>
 
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
+.dashboard-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+  flex-wrap:wrap;
+}
 
-    .dashboard-header h1 {
-      margin-bottom: 5px;
-    }
+.dashboard-header h1 {
+  margin-bottom:5px;
+}
 
-    .dashboard-header p {
-      margin-top: 0;
-      opacity: 0.75;
-    }
+.dashboard-header p {
+  margin-top:0;
+  opacity:.75;
+}
 
-    .refresh-button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 7px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+.refresh-button {
+  padding:10px 16px;
+  border:none;
+  border-radius:7px;
+  cursor:pointer;
+  font-size:14px;
+}
 
-    .balance-card {
-      padding: 30px;
-      border-radius: 14px;
-      margin-bottom: 25px;
-    }
+.balance-card {
+  padding:30px;
+  border-radius:14px;
+  margin-bottom:25px;
+}
 
-    .balance-card h2 {
-      margin-top: 0;
-    }
+.balance-card h2 {
+  margin-top:0;
+}
 
-    .balance {
-      font-size: 38px;
-      font-weight: 700;
-      margin-top: 15px;
-    }
+.balance {
+  font-size:38px;
+  font-weight:700;
+  margin-top:15px;
+}
 
-    .balance-label {
-      font-size: 14px;
-      opacity: 0.7;
-      margin-top: 5px;
-    }
+.balance-label {
+  font-size:14px;
+  opacity:.7;
+  margin-top:5px;
+}
 
-    .cards {
-      display: grid;
-      grid-template-columns:
-        repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+.cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-bottom:25px;
+}
 
-    .card {
-      padding: 20px;
-      border-radius: 12px;
-    }
+.card {
+  padding:20px;
+  border-radius:12px;
+}
 
-    .card h3 {
-      margin-top: 0;
-    }
+.card h3 {
+  margin-top:0;
+}
 
-    .card p {
-      word-break: break-word;
-    }
+.card p {
+  word-break:break-word;
+}
 
-    .table-container {
-      overflow-x: auto;
-      margin-bottom: 25px;
-    }
+.table-container {
+  overflow-x:auto;
+  margin-bottom:25px;
+}
 
-    .table-container table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 650px;
-    }
+.table-container table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
 
-    .table-container th,
-    .table-container td {
-      padding: 13px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+.table-container th,
+.table-container td {
+  padding:13px;
+  text-align:left;
+  border-bottom:1px solid #ddd;
+}
 
-    .table-container h2 {
-      margin-top: 0;
-    }
+.table-container h2 {
+  margin-top:0;
+}
 
-    .trading-section {
-      padding: 22px;
-      border-radius: 14px;
-      margin-bottom: 25px;
-    }
+.trading-section {
+  padding:22px;
+  border-radius:14px;
+  margin-bottom:25px;
+}
 
-    .trading-form {
-      max-width: 650px;
-    }
+.trading-form {
+  max-width:650px;
+}
 
-    .form-group {
-      margin-bottom: 16px;
-    }
+.form-group {
+  margin-bottom:16px;
+}
 
-    .form-group label {
-      display: block;
-      margin-bottom: 7px;
-      font-weight: 600;
-    }
+.form-group label {
+  display:block;
+  margin-bottom:7px;
+  font-weight:600;
+}
 
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      font-size: 15px;
-    }
+.form-group input,
+.form-group select {
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:7px;
+  font-size:15px;
+}
 
-    .trade-total {
-      padding: 13px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
+.trade-total {
+  padding:13px;
+  border-radius:8px;
+  margin-bottom:16px;
+  font-weight:600;
+}
 
-    .trade-button {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-    }
+.trade-button {
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:600;
+}
 
-    .trade-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+.trade-button:disabled {
+  opacity:.6;
+  cursor:not-allowed;
+}
 
-    .trade-message {
-      margin-top: 15px;
-      font-weight: 600;
-    }
+.trade-message {
+  margin-top:15px;
+  font-weight:600;
+}
 
-    .trade-message.success {
-      color: green;
-    }
+.trade-message.success {
+  color:green;
+}
 
-    .trade-message.error {
-      color: #d00;
-    }
+.trade-message.error {
+  color:#d00;
+}
 
-    .transaction-type-deposit {
-      font-weight: 700;
-    }
+.transaction-type-deposit {
+  font-weight:700;
+}
 
-    .transaction-type-withdrawal {
-      font-weight: 700;
-    }
+.transaction-type-withdrawal {
+  font-weight:700;
+}
 
-    .status {
-      font-weight: 600;
-    }
+.buy-type {
+  font-weight:700;
+}
 
-    .empty-state {
-      text-align: center;
-      padding: 25px !important;
-      opacity: 0.7;
-    }
+.sell-type {
+  font-weight:700;
+}
 
-    .loading {
-      opacity: 0.7;
-    }
+.status {
+  font-weight:600;
+}
 
-    .error {
-      color: #d00;
-    }
+.empty-state {
+  text-align:center;
+  padding:25px !important;
+  opacity:.7;
+}
 
-    .last-updated {
-      font-size: 13px;
-      opacity: 0.65;
-      margin-top: 8px;
-    }
+.loading {
+  opacity:.7;
+}
 
-    .trade-info {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-top: 10px;
-    }
+.error {
+  color:#d00;
+}
 
-    @media (max-width: 600px) {
+.last-updated {
+  font-size:13px;
+  opacity:.65;
+  margin-top:8px;
+}
 
-      .balance {
-        font-size: 30px;
-      }
+.trade-info {
+  font-size:13px;
+  opacity:.7;
+  margin-top:10px;
+}
 
-      .balance-card {
-        padding: 22px;
-      }
+@media(max-width:600px) {
 
-      .dashboard-header {
-        align-items: flex-start;
-      }
+  .balance {
+    font-size:30px;
+  }
 
-    }
+  .balance-card {
+    padding:22px;
+  }
 
-  </style>
+  .dashboard-header {
+    align-items:flex-start;
+  }
 
+}
+
+</style>
 </head>
 
 <body>
 
-
 <header class="navbar">
 
-  <div class="logo">
-    Crypto<span>Sim</span>
-  </div>
+<div class="logo">
+Crypto<span>Sim</span>
+</div>
 
-  <nav>
+<nav>
 
-    <a href="index.html">
-      Home
-    </a>
+<a href="index.html">
+Home
+</a>
 
-    <button
-      id="logoutButton"
-      class="btn-secondary">
+<button
+id="logoutButton"
+class="btn-secondary">
+Logout
+</button>
 
-      Logout
-
-    </button>
-
-  </nav>
+</nav>
 
 </header>
-
 
 
 <main class="container dashboard">
 
 
-  <!-- DASHBOARD HEADER -->
+<!-- HEADER -->
 
-  <div class="dashboard-header">
+<div class="dashboard-header">
 
-    <div>
+<div>
 
-      <h1 id="welcome">
-        Loading...
-      </h1>
+<h1 id="welcome">
+Loading...
+</h1>
 
-      <p>
-        Your simulated trading account
-      </p>
+<p>
+Your simulated trading account
+</p>
 
-      <div
-        id="lastUpdated"
-        class="last-updated">
-      </div>
+<div
+id="lastUpdated"
+class="last-updated">
+</div>
 
-    </div>
+</div>
 
+<button
+id="refreshButton"
+class="refresh-button">
 
-    <button
-      id="refreshButton"
-      class="refresh-button">
+↻ Refresh
 
-      ↻ Refresh
+</button>
 
-    </button>
+</div>
 
-  </div>
 
+<!-- BALANCE -->
 
+<div class="balance-card">
 
-  <!-- BALANCE -->
+<h2>
+Simulated USDT Balance
+</h2>
 
-  <div class="balance-card">
+<div class="balance">
 
-    <h2>
-      Simulated USDT Balance
-    </h2>
+<span id="balance">
+0.00
+</span>
 
-    <div class="balance">
+USDT
 
-      <span id="balance">
-        0.00
-      </span>
+</div>
 
-      USDT
+<div class="balance-label">
+Simulated balance
+</div>
 
-    </div>
+</div>
 
-    <div class="balance-label">
-      Simulated balance
-    </div>
 
-  </div>
+<!-- SUMMARY -->
 
+<div class="cards">
 
+<div class="card">
 
-  <!-- SUMMARY -->
+<h3>
+USDT
+</h3>
 
-  <div class="cards">
+<p>
+Simulated Tether balance
+</p>
 
-    <div class="card">
+</div>
 
-      <h3>
-        USDT
-      </h3>
 
-      <p>
-        Simulated Tether balance
-      </p>
+<div class="card">
 
-    </div>
+<h3>
+Account
+</h3>
 
+<p id="userEmail">
+Loading...
+</p>
 
-    <div class="card">
+</div>
 
-      <h3>
-        Account
-      </h3>
 
-      <p id="userEmail">
-        Loading...
-      </p>
+<div class="card">
 
-    </div>
+<h3>
+Transactions
+</h3>
 
+<p id="transactionCount">
+Loading...
+</p>
 
-    <div class="card">
+</div>
 
-      <h3>
-        Transactions
-      </h3>
+</div>
 
-      <p id="transactionCount">
-        Loading...
-      </p>
 
-    </div>
+<!-- TRADING -->
 
-  </div>
+<div class="trading-section">
 
+<h2>
+Simulated Trading
+</h2>
 
+<p>
+Practice buying and selling crypto using your simulated account.
+</p>
 
-  <!-- =================================
-       SIMULATED TRADING
-  ================================== -->
 
-  <div class="trading-section">
+<div class="trading-form">
 
-    <h2>
-      Simulated Trading
-    </h2>
 
-    <p>
-      Practice buying and selling crypto using your simulated account.
-    </p>
+<div class="form-group">
 
+<label for="tradeAsset">
+Asset
+</label>
 
-    <div class="trading-form">
+<select id="tradeAsset">
 
+<option value="BTC/USDT">
+BTC/USDT
+</option>
 
-      <!-- ASSET -->
+<option value="ETH/USDT">
+ETH/USDT
+</option>
 
-      <div class="form-group">
+<option value="SOL/USDT">
+SOL/USDT
+</option>
 
-        <label for="tradeAsset">
-          Asset
-        </label>
+<option value="BNB/USDT">
+BNB/USDT
+</option>
 
-        <select id="tradeAsset">
+</select>
 
-          <option value="BTC/USDT">
-            BTC/USDT
-          </option>
+</div>
 
-          <option value="ETH/USDT">
-            ETH/USDT
-          </option>
 
-          <option value="SOL/USDT">
-            SOL/USDT
-          </option>
+<div class="form-group">
 
-          <option value="BNB/USDT">
-            BNB/USDT
-          </option>
+<label for="tradeSide">
+Trade Type
+</label>
 
-        </select>
+<select id="tradeSide">
 
-      </div>
+<option value="BUY">
+BUY
+</option>
 
+<option value="SELL">
+SELL
+</option>
 
+</select>
 
-      <!-- BUY / SELL -->
+</div>
 
-      <div class="form-group">
 
-        <label for="tradeSide">
-          Trade Type
-        </label>
+<div class="form-group">
 
-        <select id="tradeSide">
+<label for="tradeAmount">
+Amount of Crypto
+</label>
 
-          <option value="BUY">
-            BUY
-          </option>
+<input
+type="number"
+id="tradeAmount"
+min="0"
+step="0.00000001"
+placeholder="Example: 0.01">
 
-          <option value="SELL">
-            SELL
-          </option>
+</div>
 
-        </select>
 
-      </div>
+<div class="form-group">
 
+<label for="tradePrice">
+Simulated Price (USDT)
+</label>
 
+<input
+type="number"
+id="tradePrice"
+min="0"
+step="0.01"
+placeholder="Example: 60000">
 
-      <!-- AMOUNT -->
+</div>
 
-      <div class="form-group">
 
-        <label for="tradeAmount">
-          Amount of Crypto
-        </label>
+<div
+class="trade-total"
+id="tradeTotal">
 
-        <input
-          type="number"
-          id="tradeAmount"
-          min="0"
-          step="0.00000001"
-          placeholder="Example: 0.01">
+Total: 0.00 USDT
 
-      </div>
+</div>
 
 
+<button
+id="tradeButton"
+class="trade-button">
 
-      <!-- PRICE -->
+Execute Simulated Trade
 
-      <div class="form-group">
+</button>
 
-        <label for="tradePrice">
-          Simulated Price (USDT)
-        </label>
 
-        <input
-          type="number"
-          id="tradePrice"
-          min="0"
-          step="0.01"
-          placeholder="Example: 60000">
+<div
+id="tradeMessage"
+class="trade-message">
+</div>
 
-      </div>
 
+<div class="trade-info">
 
+Trades are simulated and do not involve real cryptocurrency.
 
-      <!-- TOTAL -->
+</div>
 
-      <div
-        class="trade-total"
-        id="tradeTotal">
+</div>
 
-        Total: 0.00 USDT
+</div>
 
-      </div>
 
+<!-- HOLDINGS -->
 
+<div class="table-container">
 
-      <!-- BUTTON -->
+<h2>
+My Simulated Holdings
+</h2>
 
-      <button
-        id="tradeButton"
-        class="trade-button">
+<table>
 
-        Execute Simulated Trade
+<thead>
 
-      </button>
+<tr>
 
+<th>
+Asset
+</th>
 
-      <div
-        id="tradeMessage"
-        class="trade-message">
-      </div>
+<th>
+Quantity
+</th>
 
+<th>
+Status
+</th>
 
-      <div class="trade-info">
+</tr>
 
-        Trades are simulated and do not involve real cryptocurrency.
+</thead>
 
-      </div>
+<tbody id="holdingsTable">
 
-    </div>
+<tr>
 
-  </div>
+<td
+colspan="3"
+class="loading">
 
+Loading holdings...
 
+</td>
 
-  <!-- ACCOUNT BALANCE -->
+</tr>
 
-  <div class="table-container">
+</tbody>
 
-    <h2>
-      Account Balance
-    </h2>
+</table>
 
-    <table>
+</div>
 
-      <thead>
 
-        <tr>
+<!-- TRADE HISTORY -->
 
-          <th>
-            Asset
-          </th>
+<div class="table-container">
 
-          <th>
-            Balance
-          </th>
+<h2>
+Simulated Trade History
+</h2>
 
-          <th>
-            Status
-          </th>
+<table>
 
-        </tr>
+<thead>
 
-      </thead>
+<tr>
 
-      <tbody>
+<th>
+Asset
+</th>
 
-        <tr>
+<th>
+Type
+</th>
 
-          <td>
-            USDT
-          </td>
+<th>
+Amount
+</th>
 
-          <td>
+<th>
+Price
+</th>
 
-            <span id="tableBalance">
-              0.00
-            </span>
+<th>
+Total
+</th>
 
-            USDT
+<th>
+Status
+</th>
 
-          </td>
+<th>
+Date
+</th>
 
-          <td>
-            Simulated
-          </td>
+</tr>
 
-        </tr>
+</thead>
 
-      </tbody>
+<tbody id="tradesTable">
 
-    </table>
+<tr>
 
-  </div>
+<td
+colspan="7"
+class="loading">
 
+Loading trades...
 
+</td>
 
-  <!-- TRANSACTION HISTORY -->
+</tr>
 
-  <div class="table-container">
+</tbody>
 
-    <h2>
-      Transaction History
-    </h2>
+</table>
 
-    <table>
+</div>
 
-      <thead>
 
-        <tr>
+<!-- ACCOUNT BALANCE -->
 
-          <th>
-            Type
-          </th>
+<div class="table-container">
 
-          <th>
-            Amount
-          </th>
+<h2>
+Account Balance
+</h2>
 
-          <th>
-            Status
-          </th>
+<table>
 
-          <th>
-            Description
-          </th>
+<thead>
 
-          <th>
-            Date
-          </th>
+<tr>
 
-        </tr>
+<th>
+Asset
+</th>
 
-      </thead>
+<th>
+Balance
+</th>
 
-      <tbody id="transactionsTable">
+<th>
+Status
+</th>
 
-        <tr>
+</tr>
 
-          <td
-            colspan="5"
-            class="loading">
+</thead>
 
-            Loading transactions...
+<tbody>
 
-          </td>
+<tr>
 
-        </tr>
+<td>
+USDT
+</td>
 
-      </tbody>
+<td>
 
-    </table>
+<span id="tableBalance">
+0.00
+</span>
 
-  </div>
+USDT
 
+</td>
 
+<td>
+Simulated
+</td>
 
-  <!-- MESSAGE -->
+</tr>
 
-  <p
-    id="message"
-    class="message">
-  </p>
+</tbody>
 
+</table>
+
+</div>
+
+
+<!-- TRANSACTIONS -->
+
+<div class="table-container">
+
+<h2>
+Transaction History
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Type
+</th>
+
+<th>
+Amount
+</th>
+
+<th>
+Status
+</th>
+
+<th>
+Description
+</th>
+
+<th>
+Date
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="transactionsTable">
+
+<tr>
+
+<td
+colspan="5"
+class="loading">
+
+Loading transactions...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<p
+id="message"
+class="message">
+</p>
 
 </main>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -665,810 +755,922 @@
 
 async function loadDashboard() {
 
-  const {
-    data: { user },
-    error: userError
-  } =
-    await supabaseClient.auth.getUser();
+const {
+data:{user},
+error:userError
+}=await supabaseClient.auth.getUser();
 
 
-  if (userError || !user) {
+if(userError || !user){
 
-    window.location.href =
-      "login.html";
+window.location.href="login.html";
 
-    return;
-
-  }
-
-
-  const fullName =
-    user.user_metadata?.full_name ||
-    user.email ||
-    "User";
-
-
-  document.getElementById(
-    "welcome"
-  ).textContent =
-    "Welcome, " + fullName;
-
-
-  document.getElementById(
-    "userEmail"
-  ).textContent =
-    user.email;
-
-
-
-  /* LOAD BALANCE */
-
-  const {
-    data: balanceRow,
-    error: balanceError
-  } =
-    await supabaseClient
-      .from("user_balances")
-      .select(
-        "simulated_usdt"
-      )
-      .eq(
-        "user_id",
-        user.id
-      )
-      .maybeSingle();
-
-
-  if (balanceError) {
-
-    console.error(
-      "BALANCE ERROR:",
-      balanceError
-    );
-
-
-    showError(
-      "Unable to load your simulated balance: " +
-      balanceError.message
-    );
-
-    return;
-
-  }
-
-
-  if (!balanceRow) {
-
-    const {
-      data: newBalance,
-      error: insertError
-    } =
-      await supabaseClient
-        .from("user_balances")
-        .insert({
-
-          user_id:
-            user.id,
-
-          simulated_usdt:
-            0
-
-        })
-        .select(
-          "simulated_usdt"
-        )
-        .single();
-
-
-    if (insertError) {
-
-      showError(
-        "Unable to create your simulated balance: " +
-        insertError.message
-      );
-
-      return;
-
-    }
-
-
-    displayBalance(
-      newBalance.simulated_usdt
-    );
-
-  } else {
-
-    displayBalance(
-      balanceRow.simulated_usdt
-    );
-
-  }
-
-
-  await loadTransactions(
-    user.id
-  );
-
-
-  document.getElementById(
-    "lastUpdated"
-  ).textContent =
-    "Last updated: " +
-    new Date().toLocaleTimeString(
-      "en-US",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
-      }
-    );
+return;
 
 }
 
+
+const fullName=
+user.user_metadata?.full_name ||
+user.email ||
+"User";
+
+
+document.getElementById("welcome").textContent=
+"Welcome, "+fullName;
+
+
+document.getElementById("userEmail").textContent=
+user.email;
+
+
+/* BALANCE */
+
+const {
+data:balanceRow,
+error:balanceError
+}=await supabaseClient
+.from("user_balances")
+.select("simulated_usdt")
+.eq("user_id",user.id)
+.maybeSingle();
+
+
+if(balanceError){
+
+showError(
+"Unable to load your simulated balance: "+
+balanceError.message
+);
+
+return;
+
+}
+
+
+if(!balanceRow){
+
+const {
+data:newBalance,
+error:insertError
+}=await supabaseClient
+.from("user_balances")
+.insert({
+user_id:user.id,
+simulated_usdt:0
+})
+.select("simulated_usdt")
+.single();
+
+
+if(insertError){
+
+showError(
+"Unable to create your simulated balance: "+
+insertError.message
+);
+
+return;
+
+}
+
+displayBalance(
+newBalance.simulated_usdt
+);
+
+}else{
+
+displayBalance(
+balanceRow.simulated_usdt
+);
+
+}
+
+
+/* LOAD DATA */
+
+await loadHoldings(user.id);
+
+await loadTrades(user.id);
+
+await loadTransactions(user.id);
+
+
+document.getElementById("lastUpdated").textContent=
+"Last updated: "+
+new Date().toLocaleTimeString(
+"en-US",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}
 
 
 /* =========================================
-   DISPLAY BALANCE
+   BALANCE
 ========================================= */
 
-function displayBalance(
-  amount
-) {
+function displayBalance(amount){
 
-  const formatted =
-    Number(
-      amount || 0
-    ).toLocaleString(
-      "en-US",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    );
+const formatted=
+Number(amount||0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
 
 
-  document.getElementById(
-    "balance"
-  ).textContent =
-    formatted;
+document.getElementById("balance").textContent=
+formatted;
 
 
-  document.getElementById(
-    "tableBalance"
-  ).textContent =
-    formatted;
+document.getElementById("tableBalance").textContent=
+formatted;
 
 }
-
 
 
 /* =========================================
-   LOAD TRANSACTIONS
+   HOLDINGS
 ========================================= */
 
-async function loadTransactions(
-  userId
-) {
+async function loadHoldings(userId){
 
-  const {
-    data: transactions,
-    error
-  } =
-    await supabaseClient
-      .from("transactions")
-      .select(
-        "id, type, amount, status, description, created_at"
-      )
-      .eq(
-        "user_id",
-        userId
-      )
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+const {
+data:holdings,
+error
+}=await supabaseClient
+.from("simulated_holdings")
+.select("asset,quantity")
+.eq("user_id",userId)
+.order("asset");
 
 
-  const table =
-    document.getElementById(
-      "transactionsTable"
-    );
+const table=
+document.getElementById("holdingsTable");
 
 
-  if (error) {
+if(error){
 
-    console.error(
-      "TRANSACTION ERROR:",
-      error
-    );
+table.innerHTML=`
 
+<tr>
 
-    table.innerHTML = `
+<td colspan="3" class="error">
 
-      <tr>
+Unable to load holdings:
+${escapeHtml(error.message)}
 
-        <td
-          colspan="5"
-          class="error">
+</td>
 
-          Transaction error:
-          ${escapeHtml(
-            error.message
-          )}
+</tr>
 
-        </td>
+`;
 
-      </tr>
-
-    `;
-
-
-    document.getElementById(
-      "transactionCount"
-    ).textContent =
-      "Unable to load";
-
-    return;
-
-  }
-
-
-  if (
-    !transactions ||
-    transactions.length === 0
-  ) {
-
-    table.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="5"
-          class="empty-state">
-
-          No simulated transactions yet.
-
-        </td>
-
-      </tr>
-
-    `;
-
-
-    document.getElementById(
-      "transactionCount"
-    ).textContent =
-      "No transactions";
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "transactionCount"
-  ).textContent =
-    transactions.length +
-    (
-      transactions.length === 1
-        ? " transaction"
-        : " transactions"
-    );
-
-
-  table.innerHTML = "";
-
-
-  transactions.forEach(
-    function(transaction) {
-
-      const tr =
-        document.createElement(
-          "tr"
-        );
-
-
-      const amount =
-        Number(
-          transaction.amount || 0
-        ).toLocaleString(
-          "en-US",
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          }
-        );
-
-
-      const date =
-        transaction.created_at
-          ? new Date(
-              transaction.created_at
-            ).toLocaleString(
-              "en-US",
-              {
-                dateStyle:
-                  "medium",
-
-                timeStyle:
-                  "short"
-              }
-            )
-          : "-";
-
-
-      const transactionType =
-        String(
-          transaction.type || ""
-        );
-
-
-      const typeClass =
-        transactionType
-          .toLowerCase()
-          .includes("withdraw")
-            ? "transaction-type-withdrawal"
-            : "transaction-type-deposit";
-
-
-      tr.innerHTML = `
-
-        <td
-          class="${typeClass}">
-
-          ${escapeHtml(
-            transactionType
-          )}
-
-        </td>
-
-        <td>
-
-          ${amount} USDT
-
-        </td>
-
-        <td class="status">
-
-          ${escapeHtml(
-            transaction.status ||
-            "Completed"
-          )}
-
-        </td>
-
-        <td>
-
-          ${escapeHtml(
-            transaction.description ||
-            "-"
-          )}
-
-        </td>
-
-        <td>
-
-          ${escapeHtml(
-            date
-          )}
-
-        </td>
-
-      `;
-
-
-      table.appendChild(
-        tr
-      );
-
-    }
-  );
+return;
 
 }
 
+
+if(!holdings || holdings.length===0){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="3" class="empty-state">
+
+No simulated crypto holdings yet.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+table.innerHTML="";
+
+
+holdings.forEach(function(holding){
+
+const tr=document.createElement("tr");
+
+
+tr.innerHTML=`
+
+<td>
+${escapeHtml(holding.asset)}
+</td>
+
+<td>
+${Number(holding.quantity||0).toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:8
+}
+)}
+</td>
+
+<td>
+Simulated
+</td>
+
+`;
+
+
+table.appendChild(tr);
+
+});
+
+}
 
 
 /* =========================================
-   TRADE TOTAL CALCULATION
+   TRADE HISTORY
 ========================================= */
 
-function updateTradeTotal() {
+async function loadTrades(userId){
 
-  const amount =
-    Number(
-      document.getElementById(
-        "tradeAmount"
-      ).value
-    );
-
-
-  const price =
-    Number(
-      document.getElementById(
-        "tradePrice"
-      ).value
-    );
-
-
-  const total =
-    Number.isFinite(amount) &&
-    Number.isFinite(price)
-      ? amount * price
-      : 0;
+const {
+data:trades,
+error
+}=await supabaseClient
+.from("simulated_trades")
+.select(
+"asset,side,amount,price,total,status,created_at"
+)
+.eq("user_id",userId)
+.order(
+"created_at",
+{ascending:false}
+);
 
 
-  document.getElementById(
-    "tradeTotal"
-  ).textContent =
-    "Total: " +
-    total.toLocaleString(
-      "en-US",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    ) +
-    " USDT";
+const table=
+document.getElementById("tradesTable");
+
+
+if(error){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="7" class="error">
+
+Unable to load trades:
+${escapeHtml(error.message)}
+
+</td>
+
+</tr>
+
+`;
+
+return;
 
 }
 
 
-document
-  .getElementById(
-    "tradeAmount"
-  )
-  .addEventListener(
-    "input",
-    updateTradeTotal
-  );
+if(!trades || trades.length===0){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="7" class="empty-state">
+
+No simulated trades yet.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
 
 
-document
-  .getElementById(
-    "tradePrice"
-  )
-  .addEventListener(
-    "input",
-    updateTradeTotal
-  );
+table.innerHTML="";
 
+
+trades.forEach(function(trade){
+
+const tr=
+document.createElement("tr");
+
+
+const amount=
+Number(trade.amount||0)
+.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:8
+}
+);
+
+
+const price=
+Number(trade.price||0)
+.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+
+const total=
+Number(trade.total||0)
+.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+
+const date=
+trade.created_at
+?new Date(
+trade.created_at
+).toLocaleString(
+"en-US",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+)
+:"-";
+
+
+const side=
+String(trade.side||"");
+
+
+const sideClass=
+side==="BUY"
+?"buy-type"
+:"sell-type";
+
+
+tr.innerHTML=`
+
+<td>
+${escapeHtml(trade.asset)}
+</td>
+
+<td class="${sideClass}">
+${escapeHtml(side)}
+</td>
+
+<td>
+${amount}
+</td>
+
+<td>
+${price} USDT
+</td>
+
+<td>
+${total} USDT
+</td>
+
+<td class="status">
+${escapeHtml(trade.status||"COMPLETED")}
+</td>
+
+<td>
+${escapeHtml(date)}
+</td>
+
+`;
+
+
+table.appendChild(tr);
+
+});
+
+}
+
+
+/* =========================================
+   TRANSACTIONS
+========================================= */
+
+async function loadTransactions(userId){
+
+const {
+data:transactions,
+error
+}=await supabaseClient
+.from("transactions")
+.select(
+"id,type,amount,status,description,created_at"
+)
+.eq("user_id",userId)
+.order(
+"created_at",
+{ascending:false}
+);
+
+
+const table=
+document.getElementById(
+"transactionsTable"
+);
+
+
+if(error){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="5" class="error">
+
+Transaction error:
+${escapeHtml(error.message)}
+
+</td>
+
+</tr>
+
+`;
+
+document.getElementById(
+"transactionCount"
+).textContent=
+"Unable to load";
+
+return;
+
+}
+
+
+if(!transactions ||
+transactions.length===0){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="5" class="empty-state">
+
+No simulated transactions yet.
+
+</td>
+
+</tr>
+
+`;
+
+document.getElementById(
+"transactionCount"
+).textContent=
+"No transactions";
+
+return;
+
+}
+
+
+document.getElementById(
+"transactionCount"
+).textContent=
+transactions.length+
+(
+transactions.length===1
+?" transaction"
+:" transactions"
+);
+
+
+table.innerHTML="";
+
+
+transactions.forEach(function(transaction){
+
+const tr=
+document.createElement("tr");
+
+
+const amount=
+Number(transaction.amount||0)
+.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+
+const date=
+transaction.created_at
+?new Date(
+transaction.created_at
+).toLocaleString(
+"en-US",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+)
+:"-";
+
+
+const type=
+String(transaction.type||"");
+
+
+const typeClass=
+type.toLowerCase().includes("withdraw")
+?"transaction-type-withdrawal"
+:"transaction-type-deposit";
+
+
+tr.innerHTML=`
+
+<td class="${typeClass}">
+${escapeHtml(type)}
+</td>
+
+<td>
+${amount} USDT
+</td>
+
+<td class="status">
+${escapeHtml(
+transaction.status||"Completed"
+)}
+</td>
+
+<td>
+${escapeHtml(
+transaction.description||"-"
+)}
+</td>
+
+<td>
+${escapeHtml(date)}
+</td>
+
+`;
+
+
+table.appendChild(tr);
+
+});
+
+}
+
+
+/* =========================================
+   TRADE TOTAL
+========================================= */
+
+function updateTradeTotal(){
+
+const amount=
+Number(
+document.getElementById("tradeAmount").value
+);
+
+
+const price=
+Number(
+document.getElementById("tradePrice").value
+);
+
+
+const total=
+Number.isFinite(amount) &&
+Number.isFinite(price)
+?amount*price
+:0;
+
+
+document.getElementById("tradeTotal").textContent=
+"Total: "+
+total.toLocaleString(
+"en-US",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+)+
+" USDT";
+
+}
+
+
+document.getElementById(
+"tradeAmount"
+).addEventListener(
+"input",
+updateTradeTotal
+);
+
+
+document.getElementById(
+"tradePrice"
+).addEventListener(
+"input",
+updateTradeTotal
+);
 
 
 /* =========================================
    TRADE MESSAGE
 ========================================= */
 
-function showTradeMessage(
-  text,
-  type
-) {
+function showTradeMessage(text,type){
 
-  const message =
-    document.getElementById(
-      "tradeMessage"
-    );
+const message=
+document.getElementById(
+"tradeMessage"
+);
 
 
-  message.textContent =
-    text;
+message.textContent=text;
 
 
-  message.className =
-    "trade-message " +
-    type;
+message.className=
+"trade-message "+
+type;
 
 }
-
 
 
 /* =========================================
-   EXECUTE SIMULATED TRADE
+   EXECUTE TRADE
 ========================================= */
 
-document
-  .getElementById(
-    "tradeButton"
-  )
-  .addEventListener(
-    "click",
-    executeTrade
-  );
+document.getElementById(
+"tradeButton"
+).addEventListener(
+"click",
+executeTrade
+);
 
 
-async function executeTrade() {
+async function executeTrade(){
 
-  const asset =
-    document.getElementById(
-      "tradeAsset"
-    ).value;
-
-
-  const side =
-    document.getElementById(
-      "tradeSide"
-    ).value;
+const asset=
+document.getElementById(
+"tradeAsset"
+).value;
 
 
-  const amount =
-    Number(
-      document.getElementById(
-        "tradeAmount"
-      ).value
-    );
+const side=
+document.getElementById(
+"tradeSide"
+).value;
 
 
-  const price =
-    Number(
-      document.getElementById(
-        "tradePrice"
-      ).value
-    );
+const amount=
+Number(
+document.getElementById(
+"tradeAmount"
+).value
+);
 
 
-  if (
-    !Number.isFinite(amount) ||
-    amount <= 0
-  ) {
-
-    showTradeMessage(
-      "Please enter a valid crypto amount.",
-      "error"
-    );
-
-    return;
-
-  }
+const price=
+Number(
+document.getElementById(
+"tradePrice"
+).value
+);
 
 
-  if (
-    !Number.isFinite(price) ||
-    price <= 0
-  ) {
+if(!Number.isFinite(amount)||amount<=0){
 
-    showTradeMessage(
-      "Please enter a valid simulated price.",
-      "error"
-    );
+showTradeMessage(
+"Please enter a valid crypto amount.",
+"error"
+);
 
-    return;
-
-  }
-
-
-  const total =
-    amount * price;
-
-
-  const button =
-    document.getElementById(
-      "tradeButton"
-    );
-
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    "Processing...";
-
-
-  showTradeMessage(
-    "",
-    ""
-  );
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.rpc(
-      "create_simulated_trade",
-      {
-        p_asset:
-          asset,
-
-        p_side:
-          side,
-
-        p_amount:
-          amount,
-
-        p_price:
-          price
-      }
-    );
-
-
-  button.disabled =
-    false;
-
-
-  button.textContent =
-    "Execute Simulated Trade";
-
-
-  if (error) {
-
-    console.error(
-      "TRADE ERROR:",
-      error
-    );
-
-
-    showTradeMessage(
-      "Trade failed: " +
-      error.message,
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  showTradeMessage(
-    side +
-    " simulated successfully: " +
-    amount +
-    " " +
-    asset +
-    " for " +
-    total.toFixed(2) +
-    " USDT.",
-    "success"
-  );
-
-
-  /* Clear trade amount */
-
-  document.getElementById(
-    "tradeAmount"
-  ).value = "";
-
-
-  updateTradeTotal();
-
-
-  /* Refresh balance */
-
-  await loadDashboard();
+return;
 
 }
 
+
+if(!Number.isFinite(price)||price<=0){
+
+showTradeMessage(
+"Please enter a valid simulated price.",
+"error"
+);
+
+return;
+
+}
+
+
+const total=amount*price;
+
+
+const button=
+document.getElementById(
+"tradeButton"
+);
+
+
+button.disabled=true;
+
+button.textContent=
+"Processing...";
+
+
+showTradeMessage("","");
+
+
+const {
+error
+}=await supabaseClient.rpc(
+"create_simulated_trade",
+{
+p_asset:asset,
+p_side:side,
+p_amount:amount,
+p_price:price
+}
+);
+
+
+button.disabled=false;
+
+button.textContent=
+"Execute Simulated Trade";
+
+
+if(error){
+
+console.error(
+"TRADE ERROR:",
+error
+);
+
+
+showTradeMessage(
+"Trade failed: "+
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+showTradeMessage(
+side+
+" simulated successfully: "+
+amount+
+" "+
+asset+
+" for "+
+total.toFixed(2)+
+" USDT.",
+"success"
+);
+
+
+document.getElementById(
+"tradeAmount"
+).value="";
+
+
+updateTradeTotal();
+
+
+await loadDashboard();
+
+}
 
 
 /* =========================================
-   SECURITY
+   ESCAPE HTML
 ========================================= */
 
-function escapeHtml(
-  value
-) {
+function escapeHtml(value){
 
-  const div =
-    document.createElement(
-      "div"
-    );
+const div=
+document.createElement("div");
 
 
-  div.textContent =
-    value == null
-      ? ""
-      : String(value);
+div.textContent=
+value==null
+?""
+:String(value);
 
 
-  return div.innerHTML;
+return div.innerHTML;
 
 }
-
 
 
 /* =========================================
-   GENERAL ERROR
+   ERROR
 ========================================= */
 
-function showError(
-  text
-) {
+function showError(text){
 
-  const message =
-    document.getElementById(
-      "message"
-    );
+const message=
+document.getElementById(
+"message"
+);
 
 
-  message.textContent =
-    text;
+message.textContent=text;
 
+message.className=
+"message error";
 
-  message.className =
-    "message error";
-
-
-  message.style.display =
-    "block";
+message.style.display=
+"block";
 
 }
-
 
 
 /* =========================================
    REFRESH
 ========================================= */
 
-document
-  .getElementById(
-    "refreshButton"
-  )
-  .addEventListener(
-    "click",
-    async function() {
+document.getElementById(
+"refreshButton"
+).addEventListener(
+"click",
+async function(){
 
-      const button =
-        this;
+const button=this;
 
 
-      button.disabled =
-        true;
+button.disabled=true;
+
+button.textContent=
+"Refreshing...";
 
 
-      button.textContent =
-        "Refreshing...";
+await loadDashboard();
 
 
-      await loadDashboard();
+button.disabled=false;
 
+button.textContent=
+"↻ Refresh";
 
-      button.disabled =
-        false;
-
-
-      button.textContent =
-        "↻ Refresh";
-
-    }
-  );
-
+}
+);
 
 
 /* =========================================
    LOGOUT
 ========================================= */
 
-document
-  .getElementById(
-    "logoutButton"
-  )
-  .addEventListener(
-    "click",
-    async function() {
+document.getElementById(
+"logoutButton"
+).addEventListener(
+"click",
+async function(){
 
-      const {
-        error
-      } =
-        await supabaseClient.auth.signOut();
+const {
+error
+}=await supabaseClient.auth.signOut();
 
 
-      if (error) {
+if(error){
 
-        showError(
-          error.message
-        );
+showError(error.message);
 
-        return;
+return;
 
-      }
+}
 
 
-      window.location.href =
-        "login.html";
+window.location.href=
+"login.html";
 
-    }
-  );
-
+}
+);
 
 
 /* =========================================
@@ -1480,4 +1682,4 @@ loadDashboard();
 </script>
 
 </body>
-        </html>
+  </html>
