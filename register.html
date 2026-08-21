@@ -1,89 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account — CryptoSim</title>
-  <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+<title>Create Account — CryptoSim</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">Crypto<span>Sim</span></div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
+<header class="navbar">
 
-  <main>
-    <section class="auth-section">
+  <div class="logo">
+    Crypto<span>Sim</span>
+  </div>
 
-      <div class="auth-card">
+  <nav>
 
-        <div class="badge">SIMULATION ACCOUNT</div>
+    <a href="index.html">
+      Home
+    </a>
 
-        <h1>Create Account</h1>
+    <a href="login.html">
+      Login
+    </a>
 
-        <p class="auth-subtitle">
-          Create your free simulated crypto account.
-        </p>
+  </nav>
 
-        <form id="registerForm">
+</header>
 
-          <label for="name">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Enter your name"
-            required
-          >
 
-          <label for="email">Email Address</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="you@example.com"
-            required
-          >
 
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Create a password"
-            minlength="6"
-            required
-          >
+<main class="container">
 
-          <button type="submit" class="btn primary auth-button">
-            Create Account
-          </button>
 
-        </form>
+  <div class="form-container">
 
-        <p id="registerMessage" class="message"></p>
+    <h1>
+      Create Account
+    </h1>
 
-        <p class="auth-footer">
-          Already have an account?
-          <a href="login.html">Login</a>
-        </p>
+    <p>
+      Create your simulated trading account.
+    </p>
 
-        <div class="simulation-note">
-          This account uses virtual funds only. No real cryptocurrency
-          is deposited, transferred or withdrawn.
-        </div>
+
+    <form id="registerForm">
+
+
+      <div class="form-group">
+
+        <label for="name">
+          Full Name
+        </label>
+
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full name"
+          required>
 
       </div>
 
-    </section>
-  </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="Supabase.js"></script>
-  <script src="app.js"></script>
+
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          required>
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Create a password"
+          minlength="6"
+          required>
+
+      </div>
+
+
+
+      <button
+        type="submit"
+        id="registerButton"
+        class="btn-primary">
+
+        Create Account
+
+      </button>
+
+
+      <div
+        id="registerMessage"
+        class="message">
+      </div>
+
+
+    </form>
+
+
+    <p>
+
+      Already have an account?
+
+      <a href="login.html">
+        Login
+      </a>
+
+    </p>
+
+
+  </div>
+
+
+</main>
+
+
+
+<!-- SUPABASE LIBRARY -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- OUR SUPABASE CONNECTION -->
+<script src="Supabase.js"></script>
+
+
+
+<script>
+
+/* =================================
+   REGISTRATION
+================================= */
+
+const registerForm =
+  document.getElementById("registerForm");
+
+
+registerForm.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+
+    const name =
+      document.getElementById("name")
+      .value
+      .trim();
+
+
+    const email =
+      document.getElementById("email")
+      .value
+      .trim();
+
+
+    const password =
+      document.getElementById("password")
+      .value;
+
+
+    const message =
+      document.getElementById(
+        "registerMessage"
+      );
+
+
+    const button =
+      document.getElementById(
+        "registerButton"
+      );
+
+
+    message.style.display = "block";
+
+    message.className = "message";
+
+    message.textContent =
+      "Creating your account...";
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Creating...";
+
+
+    try {
+
+
+      /* CHECK CONNECTION */
+
+      if (
+        !window.supabaseClient
+      ) {
+
+        throw new Error(
+          "Supabase connection failed. Please check Supabase.js."
+        );
+
+      }
+
+
+      /* CREATE ACCOUNT */
+
+      const {
+        data,
+        error
+      } =
+        await window.supabaseClient.auth
+        .signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            data: {
+
+              full_name: name
+
+            }
+
+          }
+
+        });
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      /* SUCCESS */
+
+      message.className =
+        "message success";
+
+
+      message.textContent =
+        "Account created successfully! You can now log in.";
+
+
+      registerForm.reset();
+
+
+      button.disabled = false;
+
+      button.textContent =
+        "Create Account";
+
+
+    }
+
+    catch(error) {
+
+      console.error(
+        "REGISTRATION ERROR:",
+        error
+      );
+
+
+      message.className =
+        "message error";
+
+
+      message.textContent =
+        error.message;
+
+
+      button.disabled = false;
+
+      button.textContent =
+        "Create Account";
+
+    }
+
+  }
+);
+
+</script>
+
 
 </body>
-</html>
+
+        </html>
